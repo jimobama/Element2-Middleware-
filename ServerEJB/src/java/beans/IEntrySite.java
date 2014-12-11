@@ -43,7 +43,7 @@ public IEntrySite()
 //Using the synchronized modifier to avoid prevent interference of client trying to modifier or create a site with same id or accessing
 //the same variable
     @Override
-    public synchronized boolean createSite(SiteInfo site) {
+    public synchronized  boolean  createSite(SiteInfo site) {
       
         isCreate =false;
         if(this.isValidate(site))
@@ -103,17 +103,19 @@ public IEntrySite()
 
     //this return the current error message
     @Override
-    public synchronized String  getErrorMessage()  {
+    public synchronized String   getErrorMessage()  {
         
         return this.error;
     }
 
     @Override
-    public synchronized List<SiteInfo> getSites() {
+    public synchronized  List<SiteInfo> getSites() {
         List<SiteInfo> sites=this.siteManager.createQuery("From SiteInfo").getResultList();
         if(sites ==null)
             sites = new ArrayList<SiteInfo>();
         return sites;
     }
+
+  
     
 }

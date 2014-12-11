@@ -105,8 +105,7 @@ public class SiteInfo implements Serializable {
     public void setId(String  id) {
         this.id = id;
     }
-
-    @Override
+   @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
@@ -125,6 +124,7 @@ public class SiteInfo implements Serializable {
         }
         return true;
     }
+   
 
     @Override
     public String toString() {
