@@ -7,8 +7,9 @@ package entities;
 
 import helps.Validator;
 import java.io.Serializable;
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -17,19 +18,25 @@ import javax.persistence.Table;
  * @author Obaro I. Johnson
  */
 @Entity
-@Table(name="SiteInfo")
-public class SiteInfo implements Serializable {
+@Table(name="Site")
+public class Site implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @Column
-  // @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
-    
-   @Column  
-   private String name;
-   @Column 
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+ private String name;
+   
    private String flag;
-    @Column 
+   
    private String region;
     private String error;
     
@@ -37,7 +44,6 @@ public class SiteInfo implements Serializable {
      //setters and getters
     public void set(String id, String name, String reg, String f) {
         this.setFlag(f);
-        this.setId(id);
         this.setName(name);
         this.setRegion(reg);
         error="";
@@ -71,14 +77,12 @@ public class SiteInfo implements Serializable {
 
     //the method to check if the class object are same
    
-    public int compareTo(SiteInfo t) {
-        return this.getId().compareToIgnoreCase(t.getId());
-    }
+    
 
     // the method will validate the object attributes
     public boolean validate() {
         boolean isOkay = false;
-        if (!Validator.isMatch("^[a-zA-Z0-9\\_\\.]+$", this.getId())) {
+        if (!Validator.isMatch("^[a-zA-Z0-9\\_\\.]+$", String.valueOf(this.getId()))) {
             this.setErrorMessage("Enter a valid site identity in the right format!");
         } else if (!Validator.isMatch("^[a-zA-Z\\.]+[a-zA-Z\\.\\_ 0-9]+$", this.getName())) {
             this.setErrorMessage("Enter a valid site name please!");
@@ -98,13 +102,8 @@ public class SiteInfo implements Serializable {
     }
    
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String  id) {
-        this.id = id;
-    }
+
    @Override
     public int hashCode() {
         int hash = 0;
@@ -115,10 +114,10 @@ public class SiteInfo implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SiteInfo)) {
+        if (!(object instanceof Site)) {
             return false;
         }
-        SiteInfo other = (SiteInfo) object;
+        Site other = (Site) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -139,7 +138,7 @@ public class SiteInfo implements Serializable {
 
     private void setErrorMessage(String e) {
         this.error = e;
-    }
-    
+    }   
+   
     
 }

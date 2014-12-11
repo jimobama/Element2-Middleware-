@@ -12,7 +12,7 @@ import beans.IEntrySiteRemote;
 import helps.IObserver;
 import helps.ISubject;
 import helps.NetworkInfo;
-import entities.SiteInfo;
+import entities.Site;
 import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -27,7 +27,7 @@ public class SiteModel implements ISubject {
     private SiteController controller;
     private IEntrySiteRemote entrySite;
     private String messageError;
-    private List<SiteInfo> sites;
+    private List<Site> sites;
     private final TableModel tablemodel;
     private Properties prop;
     private InitialContext cxt;
@@ -71,7 +71,7 @@ public class SiteModel implements ISubject {
  }//end loadsite message
 
     //The method call the rmi 
-   public void createSite(SiteInfo info) {
+   public void createSite(Site info) {
        boolean isokay =false;
        int status =0;
        //validation here
@@ -135,7 +135,7 @@ public class SiteModel implements ISubject {
      
     }
 
-  private  List<SiteInfo> getSites() {
+  private  List<Site> getSites() {
         
             if(this.makeConnection())
             {
@@ -189,7 +189,7 @@ public class SiteModel implements ISubject {
         {
             
            
-			SiteInfo info = this.parent.sites.get(rowIndex);
+			Site info = this.parent.sites.get(rowIndex);
 			// check if the return car is null
 			if (info == null)
 				return null;

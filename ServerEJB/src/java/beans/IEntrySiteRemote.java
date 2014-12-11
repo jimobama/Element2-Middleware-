@@ -14,7 +14,7 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface IEntrySiteRemote {
-   public boolean createSite(entities.SiteInfo site);  
-    public List<entities.SiteInfo> getSites();
+   public boolean createSite(entities.Site site);  
+    public List<entities.Site> getSites();
     public String getErrorMessage();
 }

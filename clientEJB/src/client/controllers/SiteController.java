@@ -9,7 +9,7 @@ import client.views.SiteView;
 import helps.Controller;
 import helps.IObserver;
 import helps.ISubject;
-import entities.SiteInfo;
+import entities.Site;
 
 /**
  *
@@ -81,7 +81,7 @@ public class SiteController extends IObserver implements Controller {
     
      
                
-                SiteInfo site =  view.getSiteInfo();
+                Site site =  view.getSiteInfo();
                 if(!site.validate())
                 {
                   this.view.errorMessage(site.getErrorMessage());                 
@@ -99,7 +99,12 @@ public class SiteController extends IObserver implements Controller {
              public void run()
              {
                  view.changeCreateStatus(0);
-                 SiteInfo info=view.getSiteInfo();
+                 Site info =   view.getSiteInfo();
+              if(info ==null)
+               {
+                   update(0);
+                   return;
+               }
                  model.createSite(info);
                  //after the site as be created the method will connect to the server an load the site
                  model.loadSites();

@@ -5,9 +5,9 @@
 package client.views;
 
 import client.controllers.ClientController;
+import entities.Site;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -31,7 +31,7 @@ import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import helps.IObserver;
 import helps.ISubject;
-import entities.SiteInfo;
+
 import helps.View;
 
 
@@ -226,8 +226,8 @@ public class ClientView extends View implements ISubject{
      
     }
 
-    public SiteInfo getSiteInfo() {
-      SiteInfo info = null;
+    public Site getSiteInfo() {
+      Site  info = null;
       
       return info;
     }

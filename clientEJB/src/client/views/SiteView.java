@@ -6,6 +6,7 @@ package client.views;
 
 import client.controllers.SiteController;
 import client.models.SiteModel;
+import entities.Site;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -22,7 +23,7 @@ import javax.swing.JTextField;
 import helps.IObserver;
 import helps.ISubject;
 import helps.EJBServerConstants;
-import entities.SiteInfo;
+
 import helps.View;
 
 /**
@@ -205,9 +206,16 @@ public class SiteView extends View implements ISubject{
 
     
 
-      public SiteInfo getSiteInfo() {
-      SiteInfo info = new SiteInfo();
-      info.setId(this.txtSiteId.getText());
+      public Site getSiteInfo() {
+      Site info = new Site();
+      try
+      {
+         info.setId((long)Integer.parseInt(this.txtSiteId.getText()));
+      }
+      catch(Exception err)
+      {
+         JOptionPane.showMessageDialog(null,"Fetal Error: Invalid site Id format");
+      }
       info.setName(this.txtName.getText());
       info.setRegion(this.cboRegion.getSelectedItem().toString());
       info.setFlag(this.txtFlag.getText());
@@ -256,7 +264,7 @@ public class SiteView extends View implements ISubject{
        }
         @Override
         public void actionPerformed(ActionEvent e) {
-          if(e.getActionCommand() == CMD_CREATE_SITE)
+          if(e.getActionCommand() == null ? CMD_CREATE_SITE == null : e.getActionCommand().equals(CMD_CREATE_SITE))
           {
               this.view.controller.xhsCreateSite();
           }

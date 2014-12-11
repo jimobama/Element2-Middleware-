@@ -5,7 +5,7 @@
  */
 package beans;
 
-import entities.SiteInfo;
+import entities.Site;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -43,7 +43,7 @@ public IEntrySite()
 //Using the synchronized modifier to avoid prevent interference of client trying to modifier or create a site with same id or accessing
 //the same variable
     @Override
-    public synchronized  boolean  createSite(SiteInfo site) {
+    public synchronized  boolean  createSite(Site site) {
       
         isCreate =false;
         if(this.isValidate(site))
@@ -58,12 +58,12 @@ public IEntrySite()
     
     //function that will check if site details are valid
     
-    private boolean isValidate(SiteInfo siteinfo)
+    private boolean isValidate(Site siteinfo)
     {
        return siteinfo.validate();
     }
     
-    private void createNewRecord(SiteInfo siteinfo) 
+    private void createNewRecord(Site siteinfo) 
     {
         if(this.isExists(siteinfo))
         {
@@ -79,13 +79,13 @@ public IEntrySite()
     }
     
     
-    private boolean isExists(SiteInfo info)
+    private boolean isExists(Site info)
     { boolean isOkay=false;
-     SiteInfo infoT=null ;
-       String eql= "Select s from SiteInfo s where s.id ='"+info.getId().toLowerCase()+"' OR s.name= '"+info.getName().toLowerCase().trim()+"'";
+     Site infoT=null ;
+       String eql= "Select s from Site s where s.id ='"+info.getId()+"' OR s.name= '"+info.getName().toLowerCase().trim()+"'";
        try
        {
-        infoT = (SiteInfo) this.siteManager.createQuery(eql).getSingleResult();
+        infoT = (Site) this.siteManager.createQuery(eql).getSingleResult();
        }
      catch(NoResultException err)
       {
@@ -109,10 +109,10 @@ public IEntrySite()
     }
 
     @Override
-    public synchronized  List<SiteInfo> getSites() {
-        List<SiteInfo> sites=this.siteManager.createQuery("From SiteInfo").getResultList();
+    public synchronized  List<Site> getSites() {
+        List<Site> sites=this.siteManager.createQuery("From Site").getResultList();
         if(sites ==null)
-            sites = new ArrayList<SiteInfo>();
+            sites = new ArrayList<Site>();
         return sites;
     }
 
