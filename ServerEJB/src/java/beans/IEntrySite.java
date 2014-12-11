@@ -6,6 +6,7 @@
 package beans;
 
 import entities.SiteInfo;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.Remote;
@@ -102,16 +103,17 @@ public IEntrySite()
 
     //this return the current error message
     @Override
-    public final synchronized String  getErrorMessage()  {
+    public synchronized String  getErrorMessage()  {
         
         return this.error;
     }
 
     @Override
-    public final synchronized List<SiteInfo> getSites() {
-        
-        String sql="From SiteInfo";
-       return (List<SiteInfo>) this.siteManager.createQuery(sql).getResultList();
+    public synchronized List<SiteInfo> getSites() {
+        List<SiteInfo> sites=this.siteManager.createQuery("From SiteInfo").getResultList();
+        if(sites ==null)
+            sites = new ArrayList<SiteInfo>();
+        return sites;
     }
     
 }
