@@ -6,6 +6,7 @@
 package beans;
 
 import java.util.List;
+import javax.ejb.FinderException;
 import javax.ejb.Remote;
 
 /**
@@ -14,7 +15,11 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface IEntrySiteRemote {
-   public boolean createSite(entities.Site site);  
-    public List<entities.Site> getSites();
+   public boolean createSite(entities.Site site) throws FinderException ;  
+    public List<entities.Site> getSites()throws FinderException;
+    public boolean deleteSite(entities.Site info) ;
+    public boolean updateSite(int id, entities.Site info);
+    public boolean isExists(entities.Site site)throws FinderException;
+    public List<entities.Site> searchSites(entities.Site site)throws FinderException;
     public String getErrorMessage();
 }

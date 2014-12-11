@@ -6,13 +6,15 @@
 package beans;
 
 import entities.Site;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.Remote;
+import javax.ejb.FinderException;
+
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -26,15 +28,14 @@ public class IEntrySite implements IEntrySiteRemote {
  
    private static boolean isCreate;
    @PersistenceContext(unitName="ServerEJBPU")
-   private EntityManager siteManager;
+   private EntityManager siteManager ;
     private String error;
 
 
     
 public IEntrySite()
-    {//call the super class constructor
-        super();        
-        //initialised the fields;
+    {    
+     
         isCreate = false;
      
       
@@ -43,15 +44,20 @@ public IEntrySite()
 //Using the synchronized modifier to avoid prevent interference of client trying to modifier or create a site with same id or accessing
 //the same variable
     @Override
-    public synchronized  boolean  createSite(Site site) {
-      
-        isCreate =false;
-        if(this.isValidate(site))
-        {
-            this.createNewRecord(site);
-            return isCreate;
+    public synchronized  boolean  createSite(Site site) throws FinderException {
+     try
+     {
+        if(this.isExists(site) == false){
+             this.createNewRecord(site);    
+             return isCreate;
         }
-        return false;
+     }
+     catch(FinderException err)
+     {
+         throw err;
+     }
+    
+     return false;
                   
     }//end method
     
@@ -63,43 +69,15 @@ public IEntrySite()
        return siteinfo.validate();
     }
     
-    private void createNewRecord(Site siteinfo) 
+    private void createNewRecord(Site info) 
     {
-        if(this.isExists(siteinfo))
-        {
-          
-           isCreate= false;
-           this.error = "Oops this site already exists with the given name or identity number";
-           return ;
-        }
-        //add the site to the persistance database      
-        this.siteManager.persist(siteinfo);
-        isCreate= true;       
-                        
+        isCreate=false;
+        this.siteManager.persist(info);
+        isCreate=true;
+                                   
     }
-    
-    
-    private boolean isExists(Site info)
-    { boolean isOkay=false;
-     Site infoT=null ;
-       String eql= "Select s from Site s where s.id ='"+info.getId()+"' OR s.name= '"+info.getName().toLowerCase().trim()+"'";
-       try
-       {
-        infoT = (Site) this.siteManager.createQuery(eql).getSingleResult();
-       }
-     catch(NoResultException err)
-      {
-         this.error =err.getCause().toString();
-      }
-      if(infoT !=null) 
-      {
-          //iterator the object and compare the name and the id if they matched 
-         isOkay=true;
-      }
-    
-      return isOkay;
-        
-    }
+
+
 
     //this return the current error message
     @Override
@@ -109,11 +87,67 @@ public IEntrySite()
     }
 
     @Override
-    public synchronized  List<Site> getSites() {
-        List<Site> sites=this.siteManager.createQuery("From Site").getResultList();
-        if(sites ==null)
-            sites = new ArrayList<Site>();
+    public synchronized  List<Site> getSites() throws FinderException
+    {
+                   
+           Query query= this.siteManager.createQuery("Select s From Site s ");
+                         
+           List<Site>  sites=query.getResultList();           
+                      
+           return sites;
+       
+    }
+
+    @Override
+    public boolean deleteSite(Site info) {
+       boolean isOkay=false;       
+       String sql="DELETE FROM Site as s Where s.id=:id OR s.name=:name";     
+       
+       Query query = this.siteManager.createNamedQuery(sql);
+       query.setParameter("id", info.getId().toString());
+       query.setParameter("name",info.getName().toLowerCase());
+       
+       if(query.executeUpdate()>0)
+           isOkay=true;
+       return isOkay;
+    }
+
+    @Override
+    public boolean updateSite(int id, Site info) {
+         boolean isOkay=false;
+         
+         
+       
+       return isOkay;
+    }
+    
+   @Override
+  
+    public List<Site> searchSites(Site site)throws FinderException {
+        List<Site> sites=null;
+       
+        
+        String sql="SELECT s FROM Site s Where s.id like '"+site.getId()+"' OR s.name='"+site.getName().toLowerCase()+"' OR s.flag='"+site.getFlag().toLowerCase()+"' OR s.region='"+site.getRegion().toLowerCase()+"' ";
+         Query query = this.siteManager.createNamedQuery(sql);
+         sites = query.getResultList();       
+        
         return sites;
+        
+    }
+
+    @Override
+    public boolean isExists(Site site) throws FinderException {
+      
+        boolean isOkay = false;
+        String sql="Select s From Site s WHERE s.name ='"+site.getName().toLowerCase()+"'";
+         Query q = this.siteManager.createQuery(sql);    
+        
+         if(q.getResultList().size() > 0)
+            isOkay=true;
+       
+           return isOkay;    
+      
+        
     }
 
   

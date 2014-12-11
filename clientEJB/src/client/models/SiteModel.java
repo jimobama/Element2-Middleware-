@@ -14,9 +14,9 @@ import helps.ISubject;
 import helps.NetworkInfo;
 import entities.Site;
 import java.util.Properties;
+import javax.ejb.FinderException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -60,18 +60,14 @@ public class SiteModel implements ISubject {
  public synchronized void loadSites()
  {
         
-              if(makeConnection())
-                {
-                 JOptionPane.showMessageDialog(null, "Hello World");
-                 sites = entrySite.getSites();
-                  
-              }
+             sites = this.getSites();
     
     
  }//end loadsite message
 
     //The method call the rmi 
    public void createSite(Site info) {
+       String  INVALID_SITE="The site name already exists";
        boolean isokay =false;
        int status =0;
        //validation here
@@ -80,25 +76,23 @@ public class SiteModel implements ISubject {
            try
            {
             isokay = this.entrySite.createSite(info);
-           
-            if(isokay)
-            {
-               
-               status =1;
-               
-            }
+            if(isokay==true)
+                status=1;
             else
-                this.messageError = this.entrySite.getErrorMessage(); 
+                this.messageError=INVALID_SITE;
            }
-           catch(Exception ex)
-           {
-            this.messageError = ex.getMessage();
-            status =0;
-           }         
-       } 
+          catch(FinderException err)
+                  {
+                      this.messageError = INVALID_SITE;
+                  }
+                
+       }
+        
+        
        this.loadSites();
        this.tablemodel.fireTableDataChanged();
-       this.controller.update(status);
+       this.controller.update(status);      
+      
     
     }
 
@@ -136,13 +130,21 @@ public class SiteModel implements ISubject {
     }
 
   private  List<Site> getSites() {
-        
+        List<Site> sites=null;
             if(this.makeConnection())
             {
-             return this.entrySite.getSites();
+                //wrapper the find method with try block
+                try
+                {
+              sites= this.entrySite.getSites();
+                }
+                catch(FinderException err )
+                {
+                    this.messageError="Site database is empty!";
+                }
             }
             
-           return null;       
+           return  sites;       
        
     }
  
@@ -165,9 +167,10 @@ public class SiteModel implements ISubject {
       */
     final  private static int SITE_ID =0;
     final  private static int SITE_NAME =1;
-    final private static int SITE_FLAG =3;
-    final private static int SITE_REGION =2;
-    
+     final private static int SITE_REGION =2;
+    final private static int SITE_FLAG =3;   
+      final private static int SITE_STATUS =4;
+      final private static int COLUMN_COUNTS=5;
      
      
         @Override
@@ -181,7 +184,7 @@ public class SiteModel implements ISubject {
 
         @Override
         public int getColumnCount() {
-           return 4;
+           return COLUMN_COUNTS;
         }
 
         @Override
@@ -196,6 +199,8 @@ public class SiteModel implements ISubject {
 
 			// else
 			switch (columnIndex) {
+                            case SITE_STATUS :
+				return info.getStatus(); 
 			case SITE_ID:
 				return info.getId();
 			case SITE_NAME:
@@ -204,6 +209,7 @@ public class SiteModel implements ISubject {
 				return info.getRegion();
                         case SITE_FLAG :
 				return info.getFlag();
+                        
 			default:
 				return null;
 			}
@@ -214,6 +220,8 @@ public class SiteModel implements ISubject {
          @Override
 	  public Class<?> getColumnClass(int col) {
 			switch (col) {
+                         case SITE_STATUS:
+				return Boolean.class;
 			case   SITE_ID:
 				return String.class;
 			case  SITE_NAME:
@@ -222,6 +230,7 @@ public class SiteModel implements ISubject {
 				return String.class;
 			case  SITE_FLAG :
 				return String.class;
+                      
 			default:
 				return null;
 			}
@@ -232,6 +241,8 @@ public class SiteModel implements ISubject {
               @Override
 		public String getColumnName(int col) {
 			switch (col) {
+                            case SITE_STATUS:
+                                return "Option(s)";
 			case SITE_ID:
 				return "Identity No";
 			case SITE_NAME:
@@ -240,6 +251,7 @@ public class SiteModel implements ISubject {
 				return "Location";
 			case  SITE_FLAG:
 				return "Flag Rank";
+                         
 			default:
 				return null;
 			}

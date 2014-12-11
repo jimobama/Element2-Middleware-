@@ -64,7 +64,7 @@ public class SiteView extends View implements ISubject{
 
     }
 
-    private void initGui() {
+     private void initGui() {
         //initialised the form objects
         txtName =   new JTextField(30);
         txtSiteId = new JTextField(30);
@@ -157,7 +157,7 @@ public class SiteView extends View implements ISubject{
         gc.gridwidth = 2;
         this.txtFlag.setEditable(false);
        
-        this.txtFlag.setText(EJBServerConstants.SiteFlags.BRONZE);
+        this.txtFlag.setText(helps.EJBServerConstants.SiteFlags.BRONZE);
         this.pnlForm.add(this.txtFlag,gc);
         
         
@@ -208,14 +208,6 @@ public class SiteView extends View implements ISubject{
 
       public Site getSiteInfo() {
       Site info = new Site();
-      try
-      {
-         info.setId((long)Integer.parseInt(this.txtSiteId.getText()));
-      }
-      catch(Exception err)
-      {
-         JOptionPane.showMessageDialog(null,"Fetal Error: Invalid site Id format");
-      }
       info.setName(this.txtName.getText());
       info.setRegion(this.cboRegion.getSelectedItem().toString());
       info.setFlag(this.txtFlag.getText());

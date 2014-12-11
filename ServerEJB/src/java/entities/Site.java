@@ -7,11 +7,13 @@ package entities;
 
 import helps.Validator;
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -21,9 +23,24 @@ import javax.persistence.Table;
 @Table(name="Site")
 public class Site implements Serializable {
     private static final long serialVersionUID = 1L;
+    private static String error;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column
+     private String name;   
+   private String flag;   
+   private String region;
+   @Transient  boolean status ; //This field does not partaken in the persistence 
+  
+   
+   
+   
+   public Site()
+   {
+       error="";
+       setStatus(false);
+   }
 
     public Long getId() {
         return id;
@@ -33,13 +50,16 @@ public class Site implements Serializable {
         this.id = id;
     }
 
- private String name;
-   
-   private String flag;
-   
-   private String region;
-    private String error;
     
+    public boolean getStatus()
+    {
+        return this.status;
+    }
+
+    public void setStatus(boolean astatus)
+    {
+        this.status= astatus;
+    }
     
      //setters and getters
     public void set(String id, String name, String reg, String f) {
@@ -82,9 +102,7 @@ public class Site implements Serializable {
     // the method will validate the object attributes
     public boolean validate() {
         boolean isOkay = false;
-        if (!Validator.isMatch("^[a-zA-Z0-9\\_\\.]+$", String.valueOf(this.getId()))) {
-            this.setErrorMessage("Enter a valid site identity in the right format!");
-        } else if (!Validator.isMatch("^[a-zA-Z\\.]+[a-zA-Z\\.\\_ 0-9]+$", this.getName())) {
+       if (!Validator.isMatch("^[a-zA-Z\\.]+[a-zA-Z\\.\\_ 0-9]+$", this.getName())) {
             this.setErrorMessage("Enter a valid site name please!");
         } else if (!Validator.isMatch("^[a-zA-Z 0-9]+$", this.getRegion())) {            
             this.setErrorMessage("Select or enter a valid region please!");
