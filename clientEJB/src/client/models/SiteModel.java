@@ -16,6 +16,7 @@ import entities.SiteInfo;
 import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -59,12 +60,12 @@ public class SiteModel implements ISubject {
  public synchronized void loadSites()
  {
         
-   if(makeConnection())
+              if(makeConnection())
                 {
-   
-               sites = entrySite.getSites();
+                 JOptionPane.showMessageDialog(null, "Hello World");
+                 sites = entrySite.getSites();
                   
-        }
+              }
     
     
  }//end loadsite message

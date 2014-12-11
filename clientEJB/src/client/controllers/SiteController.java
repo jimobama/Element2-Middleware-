@@ -99,7 +99,7 @@ public class SiteController extends IObserver implements Controller {
              public void run()
              {
                  view.changeCreateStatus(0);
-                 SiteInfo info=view.getSiteInfo();;
+                 SiteInfo info=view.getSiteInfo();
                  model.createSite(info);
                  //after the site as be created the method will connect to the server an load the site
                  model.loadSites();
