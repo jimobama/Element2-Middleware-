@@ -9,38 +9,36 @@ package helps;
  * @author 21187498
  */
 public class NetworkInfo {
-    
+
     private int port;
     private String host;
-   public NetworkInfo()
-    {
-      port=  1099;
-      host= "localhost";
+
+    public NetworkInfo() {
+        port = 1099;
+        host = "localhost";
     }
-    public void setHost(String host)
-    {
-        this.host=host;
+
+    public void setHost(String host) {
+        this.host = host;
     }
-    public boolean validate()
-    {
-        boolean isOkay =true;
-        if( getHost().isEmpty() || (this.getPort()< 0))
-        {
-            isOkay =false;
+
+    public boolean validate() {
+        boolean isOkay = true;
+        if (getHost().isEmpty() || (this.getPort() < 0)) {
+            isOkay = false;
         }
         return isOkay;
     }
-    public void setPort(int port)
-    {
+
+    public void setPort(int port) {
         this.port = port;
     }
-    public String getHost()
-    {
+
+    public String getHost() {
         return this.host;
     }
-    
-    public int getPort()
-    {
+
+    public int getPort() {
         return port;
     }
 }

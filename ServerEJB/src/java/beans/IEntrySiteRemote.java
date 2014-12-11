@@ -15,11 +15,18 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface IEntrySiteRemote {
-   public boolean createSite(entities.Site site) throws FinderException ;  
-    public List<entities.Site> getSites()throws FinderException;
-    public boolean deleteSite(entities.Site info) ;
+
+    public boolean createSite(entities.Site site) throws FinderException;
+
+    public List<entities.Site> getSites() throws FinderException;
+
+    public boolean deleteSite(entities.Site info);
+
     public boolean updateSite(int id, entities.Site info);
-    public boolean isExists(entities.Site site)throws FinderException;
-    public List<entities.Site> searchSites(entities.Site site)throws FinderException;
+
+    public boolean isExists(entities.Site site) throws FinderException;
+
+    public List<entities.Site> searchSites(entities.Site site) throws FinderException;
+
     public String getErrorMessage();
 }

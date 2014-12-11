@@ -9,10 +9,11 @@ package helps;
  * @author 21187498
  */
 public interface Controller {
-    
- public    void launch(); 
- public   ISubject getModel();
- public   ISubject getView();
-  
-    
+
+    public void launch();
+
+    public ISubject getModel();
+
+    public ISubject getView();
+
 }

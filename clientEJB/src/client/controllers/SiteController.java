@@ -21,7 +21,7 @@ public class SiteController extends IObserver implements Controller {
     private final SiteView view;
     private static SiteController instance = null;
 
-     //threads
+    //threads
     private SiteController(SiteModel aModel, SiteView aView) {
         this.model = aModel;
         this.view = aView;
@@ -85,15 +85,15 @@ public class SiteController extends IObserver implements Controller {
 
         createThread = new Thread() {
             public void run() {
-            
+
                 Site info = view.getSiteInfo();
                 if (info == null) {
-                   
+
                     return;
                 }
                 view.changeCreateStatus(0);
                 model.createSite(info);
-             
+
             }
         };
         try {
@@ -110,7 +110,7 @@ public class SiteController extends IObserver implements Controller {
         if (status == 1) {
             this.view.successMessage("Site successfully created.");
         } else {
-            this.view.errorMessage("Fatel error: "+this.model.getErrorMessage());
+            this.view.errorMessage("Error: This site name or identity already exits");
         }
         view.changeCreateStatus(1);
     }

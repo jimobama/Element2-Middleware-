@@ -18,42 +18,36 @@ import javax.naming.NamingException;
  * @author 21187498
  */
 public class ProxySettingModel implements ISubject {
- private ProxySettingController controller;
- 
- public ProxySettingModel()
- {
-     controller=null;
- }
-  public boolean testConnection(String host, int port)
-    {
+
+    private ProxySettingController controller;
+
+    public ProxySettingModel() {
+        controller = null;
+    }
+
+    public boolean testConnection(String host, int port) {
         NetworkInfo info = new NetworkInfo();
         info.setHost(host);
         info.setPort(port);
-        Properties evr= client.Client.getProperties(info);
-        try
-        {
-            InitialContext cxt= new InitialContext(evr);
-            IConnectionRemote icon = (IConnectionRemote)cxt.lookup(helps.EJBServerConstants.Beans.ICONNECTION);
-            if(icon.connect("Testing connection 1"))
-            {
+        Properties evr = client.Client.getProperties(info);
+        try {
+            InitialContext cxt = new InitialContext(evr);
+            IConnectionRemote icon = (IConnectionRemote) cxt.lookup(helps.EJBServerConstants.Beans.ICONNECTION);
+            if (icon.connect("Testing connection 1")) {
                 return true;
             }
-            
-            
+
+        } catch (NamingException err) {
+            err.printStackTrace();
         }
-        catch(NamingException err)
-        {
-          err.printStackTrace();
-        }
-       
-         return false;
-      
+
+        return false;
+
     }
-  
-  
+
     @Override
     public void attach(IObserver observer) {
-        this.controller = (ProxySettingController)controller;
-        }
-    
+        this.controller = (ProxySettingController) controller;
+    }
+
 }

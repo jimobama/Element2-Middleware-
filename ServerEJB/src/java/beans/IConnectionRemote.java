@@ -13,6 +13,6 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface IConnectionRemote {
-    
-    boolean connect(String connectionString) ; 
+
+    boolean connect(String connectionString);
 }

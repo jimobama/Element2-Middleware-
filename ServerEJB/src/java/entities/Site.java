@@ -20,27 +20,25 @@ import javax.persistence.Transient;
  * @author Obaro I. Johnson
  */
 @Entity
-@Table(name="Site")
+@Table(name = "Site")
 public class Site implements Serializable {
+
     private static final long serialVersionUID = 1L;
     private static String error;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column
-     private String name;   
-   private String flag;   
-   private String region;
-   @Transient  boolean status ; //This field does not partaken in the persistence 
-  
-   
-   
-   
-   public Site()
-   {
-       error="";
-       setStatus(false);
-   }
+    private String name;
+    private String flag;
+    private String region;
+    @Transient
+    boolean status; //This field does not partaken in the persistence 
+
+    public Site() {
+        error = "";
+        setStatus(false);
+    }
 
     public Long getId() {
         return id;
@@ -50,30 +48,27 @@ public class Site implements Serializable {
         this.id = id;
     }
 
-    
-    public boolean getStatus()
-    {
+    public boolean getStatus() {
         return this.status;
     }
 
-    public void setStatus(boolean astatus)
-    {
-        this.status= astatus;
+    public void setStatus(boolean astatus) {
+        this.status = astatus;
     }
-    
-     //setters and getters
+
+    //setters and getters
     public void set(String id, String name, String reg, String f) {
         this.setFlag(f);
         this.setName(name);
         this.setRegion(reg);
-        error="";
+        error = "";
     }
 
     public void setFlag(String flg) {
         this.flag = flg;
     }
 
-     public void setName(String aname) {
+    public void setName(String aname) {
         this.name = aname;
     }
 
@@ -86,43 +81,32 @@ public class Site implements Serializable {
         return this.flag;
     }
 
- 
     public String getName() {
         return this.name;
     }
 
-    public String  getRegion() {
+    public String getRegion() {
         return this.region;
     }
 
     //the method to check if the class object are same
-   
-    
-
     // the method will validate the object attributes
     public boolean validate() {
         boolean isOkay = false;
-       if (!Validator.isMatch("^[a-zA-Z\\.]+[a-zA-Z\\.\\_ 0-9]+$", this.getName())) {
+        if (!Validator.isMatch("^[a-zA-Z\\.]+[a-zA-Z\\.\\_ 0-9]+$", this.getName())) {
             this.setErrorMessage("Enter a valid site name please!");
-        } else if (!Validator.isMatch("^[a-zA-Z 0-9]+$", this.getRegion())) {            
+        } else if (!Validator.isMatch("^[a-zA-Z 0-9]+$", this.getRegion())) {
             this.setErrorMessage("Select or enter a valid region please!");
-        }else if(!Validator.isMatch("^[a-zA-Z 0-9 \\.\\_]+$", this.getFlag()))
-        {
+        } else if (!Validator.isMatch("^[a-zA-Z 0-9 \\.\\_]+$", this.getFlag())) {
             this.setErrorMessage("Select or enter site flag");
+        } else {
+            isOkay = true;
         }
-       else
-        {
-            isOkay=true;
-        }
-
 
         return isOkay;
     }
-   
 
-
-
-   @Override
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
@@ -141,14 +125,12 @@ public class Site implements Serializable {
         }
         return true;
     }
-   
 
     @Override
     public String toString() {
         return "entities.SiteInfo[ id=" + id + " ]";
     }
-    
-    
+
     // methods
     public String getErrorMessage() {
         return error;
@@ -156,7 +138,6 @@ public class Site implements Serializable {
 
     private void setErrorMessage(String e) {
         this.error = e;
-    }   
-   
-    
+    }
+
 }
