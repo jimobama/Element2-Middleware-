@@ -10,6 +10,7 @@ import helps.Controller;
 import helps.IObserver;
 import helps.ISubject;
 import entities.Site;
+import java.util.List;
 
 /**
  *
@@ -114,7 +115,14 @@ public class SiteController extends IObserver implements Controller {
         }
         view.changeCreateStatus(1);
     }
-
+ public void update(int status,String msg) {
+        if (status == 1) {
+            this.view.successMessage(msg);
+        } else {
+            this.view.errorMessage(msg);
+        }
+        view.changeCreateStatus(1);
+    }
     public void xhsCancelCreateSite() {
 
         try {
@@ -127,6 +135,53 @@ public class SiteController extends IObserver implements Controller {
         }
 
         this.view.changeCreateStatus(1);
+    }
+
+    public void xhsReloadSites() {
+       
+        Thread threadLoads= new Thread()
+        {
+         public  void run()
+            {
+                model.loadSites();
+            }
+        };
+       
+        try
+        {
+         threadLoads.join();
+         threadLoads.start();      
+        }
+        catch(Exception err)
+        {
+            this.view.errorMessage(err.getMessage());
+        }
+        
+    }
+
+    public void xhsDeleteSites() {
+        
+        
+        List<Site> sites = this.view.getSelectedSites();
+        if(sites !=null)
+        {
+            model.deleteSites(sites);
+            
+        }else
+         this.view.errorMessage("Please select a site to delete");
+    }
+
+    public void xhsUpdateSites(Site siteInfo) {
+       
+    }
+
+    public void xhsFindSites(Site siteInfo) {
+        
+        Site site = this.view.getSiteInfo();
+        if(site !=null)
+        {
+            this.model.findWidth(site);
+        }     
     }
 
 }

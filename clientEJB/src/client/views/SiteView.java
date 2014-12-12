@@ -26,6 +26,7 @@ import helps.EJBServerConstants;
 
 import helps.View;
 import java.awt.Dimension;
+import java.util.List;
 
 /**
  *
@@ -248,6 +249,10 @@ public class SiteView extends View implements ISubject {
         }
     }
 
+    public List<Site> getSelectedSites() {
+       return null;
+    }
+
     private class EventHandler implements ActionListener {
 
         private SiteView view;
@@ -262,7 +267,20 @@ public class SiteView extends View implements ISubject {
                 this.view.controller.xhsCreateSite();
             } else if (e.getActionCommand().equalsIgnoreCase(CMD_CREATE_SITE_RUNNING)) {
                 this.view.controller.xhsCancelCreateSite();
+            } else if(e.getActionCommand().equalsIgnoreCase(SiteView.CMD_REFERSH_SITE))
+            {
+                this.view.controller.xhsReloadSites();
+            }else if(e.getActionCommand().equalsIgnoreCase(SiteView.CMD_DELETE_SITE))
+            {
+                this.view.controller.xhsDeleteSites();
+            }else if(e.getActionCommand().equalsIgnoreCase(SiteView.CMD_UPDATE_SITE))
+            {
+                this.view.controller.xhsUpdateSites(this.view.getSiteInfo());
+            }else if(e.getActionCommand().equalsIgnoreCase(SiteView.CMD_SEARCH_SITE))
+            {
+                this.view.controller.xhsFindSites(this.view.getSiteInfo());
             }
+             
 
         }
 

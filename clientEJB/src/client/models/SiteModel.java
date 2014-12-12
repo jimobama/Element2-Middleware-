@@ -13,6 +13,7 @@ import helps.IObserver;
 import helps.ISubject;
 import helps.NetworkInfo;
 import entities.Site;
+import java.util.Iterator;
 import java.util.Properties;
 import javax.ejb.FinderException;
 import javax.naming.InitialContext;
@@ -55,6 +56,7 @@ public class SiteModel implements ISubject {
     public synchronized void loadSites() {
 
         sites = this.getSites();
+        this.tablemodel.fireTableDataChanged();
 
     }//end loadsite message
 
@@ -77,7 +79,7 @@ public class SiteModel implements ISubject {
         }
 
         this.loadSites();
-        this.tablemodel.fireTableDataChanged();
+        
         this.controller.update(status);
 
     }
@@ -125,6 +127,39 @@ public class SiteModel implements ISubject {
 
         return sites;
 
+    }
+
+    public void deleteSites(List<Site> sites) {
+       this.makeConnection();
+        if(sites.size()> 0)
+        {
+            Iterator<Site> iter = sites.iterator();
+            
+            while(iter.hasNext())
+            {
+                 this.entrySite.deleteSite(iter.next());
+            }
+            
+            this.getSites();
+            this.controller.update(1,"Sites successfully deleted");
+        }
+    }
+
+    public void findWidth(Site site) {
+      boolean status=  this.makeConnection();
+      if(status)
+      {
+          try
+          {
+            sites= this.entrySite.searchSites(site);
+            this.tablemodel.fireTableDataChanged();
+          }
+          catch(FinderException err)
+          {
+              this.messageError=err.getMessage();
+          }
+      }
+        
     }
 
     //the inner class for the table model
