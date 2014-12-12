@@ -8,7 +8,7 @@ package helps;
  *
  * @author 21187498
  */
-public interface ISubject {
+public interface ISubject{
 
     public void attach(IObserver observer);
 

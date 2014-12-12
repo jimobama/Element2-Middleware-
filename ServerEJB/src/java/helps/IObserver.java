@@ -8,7 +8,7 @@ package helps;
  *
  * @author 21187498
  */
-public class IObserver {
+public class IObserver  {
 
     public void update(int status) {
 
