@@ -184,6 +184,23 @@ public class SiteModel implements ISubject {
       return filterSites;
     }
 
+    public void updateSite(Site s) {
+       if(s !=null)
+       {
+           if(this.makeConnection())
+           {
+               if(this.entrySite.updateSite(s.getId().intValue(), s)){
+               this.loadSites();
+               this.controller.update(1,"Site as be successfully updated");
+               }else
+               {
+                  this.controller.update(0,"Site update fails please check your fields to make such the right information is passed"); 
+               }
+           }
+       }
+        
+    }
+
     //the inner class for the table model
     private class TableModel extends AbstractTableModel {
 

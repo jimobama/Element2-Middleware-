@@ -41,7 +41,11 @@ public class SiteView extends View implements ISubject {
       private static final String CMD_DELETE_SITE = "Delete";
        private static final String CMD_SEARCH_SITE = "Search";
     private static final String CMD_IN_PROGRESS_RUNNING = "In Progress...";
-
+    
+   public static final int RELOAD= 1;
+   public static final int DELETE =2;
+   public static final int SEARCH=3;
+   public static final int UPDATE =4;
     //defined the form object for the sites
     private JPanel pnlTable;
     private JTable tblSites;
@@ -313,6 +317,58 @@ public class SiteView extends View implements ISubject {
 
     public List<Site> getSelectedSites() {
        return null;
+    }
+
+    public void changeProgressStatus(int what, int i) {
+      
+        class StatusChanger
+        {
+            String value;
+            StatusChanger(String changeValue)
+            {
+                value=changeValue;
+            }
+            void toNormal()
+            {
+               btnDelete.setText(CMD_DELETE_SITE);
+               btnSearch.setText(CMD_SEARCH_SITE);
+               btnUpdate.setText(CMD_UPDATE_SITE);
+               btnreferesh.setText(SiteView.CMD_REFERSH_SITE);
+            }
+            void change(int awhat)
+            {
+               switch(awhat)
+                    {
+                        case SiteView.RELOAD:
+                            btnreferesh.setText(value);
+                            break;
+                         case SiteView.DELETE:
+                            btnDelete.setText(value);
+                            break;
+                         case SiteView.UPDATE:
+                            btnUpdate.setText(value);
+                            break;
+                         case SiteView.SEARCH:
+                             btnSearch.setText(value);
+                             break;
+                         default:
+                             break;                     
+                   
+                    } //end switch
+            }
+            
+        }//end fucntion class
+        
+       //check if to change back from progress or not
+        StatusChanger changer = new StatusChanger(SiteView.CMD_IN_PROGRESS_RUNNING);
+        if(i==1)
+        {
+           changer.change(what);
+        }else
+        {
+            changer.toNormal();
+        }
+        
     }
 
     private class EventHandler implements ActionListener {

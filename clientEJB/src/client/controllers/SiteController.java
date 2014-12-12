@@ -98,12 +98,8 @@ public class SiteController extends IObserver implements Controller {
 
             }
         };
-        try {
-            createThread.join();
-            createThread.start();
-        } catch (Exception err) {
-            this.view.errorMessage(err.getMessage());
-        }
+        handleThread(createThread);
+       
 
     }
 
@@ -140,50 +136,87 @@ public class SiteController extends IObserver implements Controller {
 
     public void xhsReloadSites() {
        
+        this.view.changeProgressStatus(SiteView.RELOAD,1);
         Thread threadLoads= new Thread()
         {
+            
+         @Override
          public  void run()
             {
+                
                 model.loadSites();
+                view.changeProgressStatus(SiteView.RELOAD,0);
             }
         };
        
-        try
+        this.handleThread(threadLoads);
+        
+    }
+
+    public void xhsDeleteSites() {
+     
+        this.view.changeProgressStatus(SiteView.DELETE, 1);
+        Thread tDel= new Thread(){
+        
+            public void run(){
+            List<Site> sites = model.getSelectedSites();       
+            if(sites !=null)
+            {
+                model.deleteSites(sites);
+                view.changeProgressStatus(SiteView.DELETE, 0);
+
+            }else
+             view.errorMessage("Please select a site to delete");
+            }
+        };
+        this.handleThread(tDel);
+    }
+
+    public void xhsUpdateSites(Site siteInfo) {
+        this.view.changeProgressStatus(SiteView.UPDATE, 1);
+        if(siteInfo ==null)
+            return ;
+        //update the site information with the following ID;
+        Thread tUpdate= new Thread()
         {
-         threadLoads.join();
-         threadLoads.start();      
+            public void run()
+            {
+               model.updateSite(siteInfo);
+               view.changeProgressStatus(SiteView.DELETE, 1);
+            }
+        };
+        
+        this.handleThread(tUpdate);
+       
+    }
+
+    public void xhsFindSites(Site site) {        
+  
+        if(site !=null)
+        {  
+            this.view.changeProgressStatus(SiteView.SEARCH, 1);
+            Thread t= new Thread()
+            {
+                public void run(){
+                model.findWidth(site);
+                view.changeProgressStatus(SiteView.SEARCH, 0);
+                }
+            };
+            this.handleThread(t);
+        }     
+    }
+
+    private void handleThread(Thread t) {
+        
+       try
+        {
+         t.join();
+         t.start();      
         }
         catch(Exception err)
         {
             this.view.errorMessage(err.getMessage());
         }
-        
-    }
-
-    public void xhsDeleteSites() {
-        
-        
-        List<Site> sites = this.model.getSelectedSites();       
-        if(sites !=null)
-        {
-            model.deleteSites(sites);
-            
-        }else
-         this.view.errorMessage("Please select a site to delete");
-    }
-
-    public void xhsUpdateSites(Site siteInfo) {
-       
-    }
-
-    public void xhsFindSites(Site site) {
-        
-  
-        if(site !=null)
-        {
-             
-            this.model.findWidth(site);
-        }     
     }
 
 }
