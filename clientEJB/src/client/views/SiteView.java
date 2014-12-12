@@ -25,6 +25,7 @@ import helps.ISubject;
 import helps.EJBServerConstants;
 
 import helps.View;
+import java.awt.Dimension;
 
 /**
  *
@@ -34,6 +35,11 @@ public class SiteView extends View implements ISubject {
 
     private static final String CMD_CREATE_SITE = "Create";
     private static final String CMD_CREATE_SITE_RUNNING = "Cancel";
+    private static final String CMD_REFERSH_SITE = "Refresh";
+     private static final String CMD_UPDATE_SITE = "Update";
+      private static final String CMD_DELETE_SITE = "Delete";
+       private static final String CMD_SEARCH_SITE = "Search";
+    private static final String CMD_IN_PROGRESS_RUNNING = "In Progress...";
 
     //defined the form object for the sites
     private JPanel pnlTable;
@@ -51,6 +57,10 @@ public class SiteView extends View implements ISubject {
     private JLabel lblFlags;
     //buttons
     private JButton btnCreateSite;
+    private JButton btnSearch;
+    private JButton btnDelete;
+    private JButton btnUpdate;
+    private JButton btnreferesh;    
     SiteController controller;
 
     // The constuctor
@@ -77,6 +87,11 @@ public class SiteView extends View implements ISubject {
         //buttons
 
         btnCreateSite = new JButton(CMD_CREATE_SITE);
+        this.btnDelete= new JButton(CMD_DELETE_SITE);
+        this.btnSearch = new JButton(CMD_SEARCH_SITE);
+        this.btnUpdate= new JButton(CMD_UPDATE_SITE);
+        this.btnreferesh= new JButton(SiteView.CMD_REFERSH_SITE);
+        
 
         //add the controls to the panel
         this.pnlForm = new JPanel(new GridBagLayout());
@@ -147,6 +162,7 @@ public class SiteView extends View implements ISubject {
         this.pnlTable = new JPanel();
         this.tblSites = new JTable();
         this.jsclSite = new JScrollPane(this.tblSites);
+        this.jsclSite.setPreferredSize(new Dimension(500,300));
         this.pnlTable.add(this.jsclSite);
 
         gc.anchor = GridBagConstraints.NORTHWEST;
@@ -157,13 +173,25 @@ public class SiteView extends View implements ISubject {
         this.pnlForm.add(this.pnlTable, gc);
 
         //add the site table to
+        JPanel pnlButtons = new JPanel();
         gc.anchor = GridBagConstraints.NORTHWEST;
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.gridx = 1;
         gc.gridy = 4;
-        gc.gridwidth = 1;
-        this.btnCreateSite.addActionListener(new EventHandler(this));
-        this.pnlForm.add(btnCreateSite, gc);
+        gc.gridwidth = 2;
+        pnlButtons.add( this.btnCreateSite);
+        pnlButtons.add(this.btnUpdate);
+         pnlButtons.add(this.btnDelete);
+         pnlButtons.add(this.btnSearch);
+         pnlButtons.add(this.btnreferesh);
+           
+        EventHandler btnEvt =new EventHandler(this);
+        this.btnCreateSite.addActionListener(btnEvt);
+        this.btnDelete.addActionListener(btnEvt);
+        this.btnSearch.addActionListener(btnEvt);
+        this.btnUpdate.addActionListener(btnEvt);
+        this.btnreferesh.addActionListener(btnEvt);
+        this.pnlForm.add( pnlButtons, gc);
 
         //add the controls to the window       
         GridBagConstraints mainGC = new GridBagConstraints();
@@ -171,6 +199,7 @@ public class SiteView extends View implements ISubject {
         mainGC.fill = GridBagConstraints.HORIZONTAL;
         mainGC.gridx = 0;
         mainGC.gridy = 0;
+         
         this.add(this.pnlForm, mainGC);
 
     }
