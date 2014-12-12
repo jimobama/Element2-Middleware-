@@ -16,11 +16,13 @@ import java.util.List;
  *
  * @author 21187498
  */
-public class SiteController extends IObserver implements Controller {
+public class SiteController extends IObserver implements Controller,ISubject {
 
     private final SiteModel model;
     private final SiteView view;
     private static SiteController instance = null;
+    
+    private ClientController parentController;
 
     //threads
     private SiteController(SiteModel aModel, SiteView aView) {
@@ -236,6 +238,36 @@ public class SiteController extends IObserver implements Controller {
     public void xhsCloseWindow() {
         this.view.repaint();
         this.view.dispose();       
+    }
+
+    public void xhsSelectedSites() {
+       List<Site> selectedSites= this.model.getSelectedSites();      
+      
+       if(selectedSites.size()>1)
+       {
+         this.update(0, "Multiply selection of site is not allow");
+         return ;
+       }
+      if(selectedSites.size()<=0)     
+          return ;
+       // else processor the sites.
+       Site site= selectedSites.iterator().next();
+     
+       this.parentController.xhsSelectStructureSite(site);
+      
+       
+       
+    }
+
+    @Override
+    public void attach(IObserver observer) {
+        parentController = (ClientController)observer;
+    }
+
+    void callFromInsertSite(boolean a) {
+      
+       SiteView.IsSelectMode = true;
+       this.view.diableInsertionCall(a);
     }
 
 }

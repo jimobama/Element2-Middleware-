@@ -38,7 +38,7 @@ import helps.View;
  *
  * @author 21187498
  */
-public class ClientView extends View implements ISubject {
+public class ClientView extends View implements ISubject{
 
     final private static String CMD_TEST_CONNECTION = "Test connection";
     final private static String EXIT_APPLICATION_CMD = "Exit Application";
@@ -55,16 +55,17 @@ public class ClientView extends View implements ISubject {
 
     private JToolBar toolbar;
     private JMenuBar menubar;
-    JMenuItem iMTestConnection;
+   private JMenuItem iMTestConnection;
 
     private JPanel content;
     private GridBagLayout contentLayout;
-    JMenu mSiteManager;
+   private JMenu mSiteManager;
 
-    JMenuItem iMNewSite;
+   private JMenuItem iMNewSite;
+    private PnlStructure pnlMainStructure;
 
-    JMenu mNetwork;
-    JMenuItem iMProxySettings;
+    private JMenu mNetwork;
+    private JMenuItem iMProxySettings;
 
     public ClientView(String title) {
         //set the window default looks
@@ -76,6 +77,7 @@ public class ClientView extends View implements ISubject {
         ICON_FILE_MENU = this.getClass().getResource("../resources/file_icon_menu.png");
         ICON_TEST_NETWORK = this.getClass().getResource("../resources/test_network.png");
         APP_ICON = this.getClass().getResource("../resources/app_icon.png");
+        
         this.initGui();
         this.setTitle(title);
 
@@ -88,6 +90,9 @@ public class ClientView extends View implements ISubject {
 
     private void initGui() {
 
+         pnlMainStructure = new PnlStructure();
+         
+         pnlMainStructure.attach(this);
         this.setLayout(new BorderLayout());
         this.contentLayout = new GridBagLayout();
         this.content = new JPanel();
@@ -104,6 +109,7 @@ public class ClientView extends View implements ISubject {
         //now we are going to initialised the form controls
         this.addWindowListener(new ClientView.CustomizeWindowAdaptor(this));
         this.initContentGui();
+        this.setContentPane(this.pnlMainStructure);
         //set the application incon
         Image img = (View.getPngTransparentImageIcon(new ImageIcon(APP_ICON))).getImage();
         this.setIconImage(img);
@@ -202,6 +208,16 @@ public class ClientView extends View implements ISubject {
 
         return info;
     }
+
+   IObserver xhsCallController() {
+       return this.controller;
+    }
+
+    public void setSiteInformation(Site site) {
+      this.pnlMainStructure.setSiteInformation(site);
+    }
+
+   
 
     private class CustomizeWindowAdaptor extends WindowAdapter {
 

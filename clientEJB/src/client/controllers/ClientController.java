@@ -6,6 +6,9 @@ package client.controllers;
 
 import client.models.ClientModel;
 import client.views.ClientView;
+import client.views.SiteView;
+import static client.views.SiteView.IsSelectMode;
+import entities.Site;
 import java.awt.Dimension;
 import javax.swing.JOptionPane;
 import helps.IObserver;
@@ -31,6 +34,8 @@ public class ClientController extends IObserver implements Controller {
         //the attachment of the controller
         this.model.attach(this);
         this.view.attach(this);
+        SiteController.GetInstance().attach(this);
+       
 
     }
 
@@ -75,12 +80,24 @@ public class ClientController extends IObserver implements Controller {
     final public void xhsOpenNewForm() {
 
         siteController = SiteController.GetInstance();
+        SiteView.IsSelectMode=false;
         siteController.launch();
     }
 
     final public void xhsProxySettingOpenView() {
         ProxySettingController proxySettingController = ProxySettingController.getInstance();
         proxySettingController.launch();
+    }
+
+    void xhsSelectStructureSite(Site site) {
+     
+       this.view.setSiteInformation(site);
+    }
+
+    public void xhsInsertionSettings(boolean b) {
+     siteController = SiteController.GetInstance();
+     this.siteController.callFromInsertSite(b);
+     siteController.launch();
     }
 
 }

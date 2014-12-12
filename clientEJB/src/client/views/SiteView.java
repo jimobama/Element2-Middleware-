@@ -9,6 +9,7 @@ import client.models.SiteModel;
 import entities.Site;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.BorderLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,17 +27,21 @@ import helps.EJBServerConstants;
 
 import helps.View;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.List;
+import javax.swing.BoxLayout;
 
 /**
  *
  * @author 21187498
  */
 public class SiteView extends View implements ISubject {
+    
+    public static boolean IsSelectMode=false;
 
     private static final String CMD_CREATE_SITE = "Create";
     private static final String CMD_CREATE_SITE_RUNNING = "Cancel";
@@ -45,6 +50,7 @@ public class SiteView extends View implements ISubject {
       private static final String CMD_DELETE_SITE = "Delete";
        private static final String CMD_SEARCH_SITE = "Search";
     private static final String CMD_IN_PROGRESS_RUNNING = "In Progress...";
+    private static final String CMD_ADD_STRUCTURE_IN ="Select";
     private static  boolean Ready=false;
     
    public static final int RELOAD= 1;
@@ -71,6 +77,7 @@ public class SiteView extends View implements ISubject {
     private JButton btnDelete;
     private JButton btnUpdate;
     private JButton btnreferesh;    
+    private JButton btnSelectSite;
     SiteController controller;
 
     // The constuctor
@@ -107,7 +114,8 @@ public class SiteView extends View implements ISubject {
         this.btnSearch = new JButton(CMD_SEARCH_SITE);
         this.btnUpdate= new JButton(CMD_UPDATE_SITE);
         this.btnreferesh= new JButton(SiteView.CMD_REFERSH_SITE);
-        
+        this.btnSelectSite=new JButton(CMD_ADD_STRUCTURE_IN);
+        btnSelectSite.addActionListener(new EventHandler(this));
 
         //add the controls to the panel
         this.pnlForm = new JPanel(new GridBagLayout());
@@ -181,12 +189,7 @@ public class SiteView extends View implements ISubject {
         this.jsclSite.setPreferredSize(new Dimension(500,300));
         this.pnlTable.add(this.jsclSite);
 
-        gc.anchor = GridBagConstraints.NORTHWEST;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        gc.gridx = 0;
-        gc.gridy = 5;
-        gc.gridwidth = 3;
-        this.pnlForm.add(this.pnlTable, gc);
+       
 
         //add the site table to
         JPanel pnlButtons = new JPanel();
@@ -208,14 +211,34 @@ public class SiteView extends View implements ISubject {
         this.btnUpdate.addActionListener(btnEvt);
         this.btnreferesh.addActionListener(btnEvt);
         this.pnlForm.add( pnlButtons, gc);
+        
+        gc.anchor = GridBagConstraints.NORTHWEST;
+        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.gridx = 0;
+        gc.gridy = 5;
+        gc.gridwidth = 3;
+        this.pnlForm.add(this.pnlTable, gc);
+        
+     
+        gc.anchor = GridBagConstraints.NORTHEAST;
+        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.gridx = 2;
+        gc.gridy = 6;
+        gc.gridwidth = 1;
+        JPanel pnlBottom = new JPanel();
+        pnlBottom.setLayout(new BorderLayout());
+        this.btnSelectSite.setPreferredSize(new Dimension(100,20));
+        pnlBottom.add(this.btnSelectSite,BorderLayout.EAST);       
+        this.btnSelectSite.setVisible(IsSelectMode);
+        this.pnlForm.add( pnlBottom,gc);
+       
 
         //add the controls to the window       
         GridBagConstraints mainGC = new GridBagConstraints();
         mainGC.anchor = GridBagConstraints.NORTHWEST;
         mainGC.fill = GridBagConstraints.HORIZONTAL;
         mainGC.gridx = 0;
-        mainGC.gridy = 0;
-         
+        mainGC.gridy = 0;         
         this.add(this.pnlForm, mainGC);
 
     }
@@ -379,6 +402,24 @@ public class SiteView extends View implements ISubject {
         
     }
 
+    public void diableInsertionCall(boolean aBoolean) {
+           if(aBoolean)  {         
+            this.btnSelectSite.setVisible(false);
+           }else
+           {
+              this.btnSelectSite.setVisible(true); 
+           }
+            this.btnCreateSite.setEnabled(aBoolean);
+            this.btnDelete.setEnabled(aBoolean);
+            this.btnUpdate.setEnabled(aBoolean);            
+            this.repaint();
+            this.pack();
+            this.revalidate();
+            
+       
+       
+    }
+
     private class EventHandler implements ActionListener, WindowListener,KeyListener {
 
         private SiteView view;
@@ -410,6 +451,17 @@ public class SiteView extends View implements ISubject {
                 if(SiteView.Ready){
                 this.view.controller.xhsFindKeySites(this.view.getSiteInfo(true));
                 }
+            }else if(e.getActionCommand().equalsIgnoreCase(SiteView.CMD_ADD_STRUCTURE_IN))
+            {
+                if(SiteView.Ready){
+                     SiteView.IsSelectMode=false;
+                     this.view.btnSelectSite.setVisible(false);
+                     this.view.repaint();
+                     this.view.pack();
+                     this.view.dispose();
+                    this.view.controller.xhsSelectedSites();
+                    
+                }
             }
              
 
@@ -424,6 +476,10 @@ public class SiteView extends View implements ISubject {
 
         @Override
         public void windowClosing(WindowEvent e) {
+             SiteView.IsSelectMode=false;
+             this.view.btnSelectSite.setVisible(false);
+             this.view.repaint();
+             this.view.pack();
             this.view.controller.xhsCloseWindow();
           }
 
