@@ -5,7 +5,7 @@
  */
 package beans;
 
-import com.sun.xml.internal.ws.util.StringUtils;
+
 import entities.Site;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -15,7 +15,6 @@ import javax.ejb.FinderException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -96,7 +95,7 @@ public class IEntrySite implements IEntrySiteRemote {
 
         Query query = this.siteManager.createQuery(sql);
         query.setParameter("id", info.getId());
-        query.setParameter("name", StringUtils.decapitalize(info.getName().trim().toLowerCase()));  
+        query.setParameter("name",info.getName().trim().toLowerCase());  
        //excute the query to check the affected row;
         int affectedRow=query.executeUpdate();
         if (affectedRow > 0) {  
@@ -147,9 +146,9 @@ public class IEntrySite implements IEntrySiteRemote {
          
          String eql ="";
         Query query = this.siteManager.createQuery("Select s From Site s WHERE lower(s.name)=:name OR s.id=:id OR LOWER(s.region)=:region ");
-        query.setParameter("name", StringUtils.decapitalize(site.getName().toLowerCase().trim()));
+        query.setParameter("name", site.getName().toLowerCase().trim());
         query.setParameter("id",site.getId());
-        query.setParameter("region", StringUtils.decapitalize(site.getRegion().toLowerCase().trim()));
+        query.setParameter("region", site.getRegion().toLowerCase().trim());
 
         List<Site> sites = query.getResultList();
 
