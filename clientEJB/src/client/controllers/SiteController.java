@@ -11,7 +11,6 @@ import helps.IObserver;
 import helps.ISubject;
 import entities.Site;
 import java.util.List;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -207,6 +206,20 @@ public class SiteController extends IObserver implements Controller {
         }     
     }
 
+     public void xhsFindKeySites(Site site) {        
+  
+        if(site !=null)
+        {  
+           
+            Thread t= new Thread()
+            {
+                public void run(){
+                model.findWidth(site);              
+                }
+            };
+            this.handleThread(t);
+        }     
+    }
     private void handleThread(Thread t) {
         
        try
@@ -218,6 +231,11 @@ public class SiteController extends IObserver implements Controller {
         {
             this.view.errorMessage(err.getMessage());
         }
+    }
+
+    public void xhsCloseWindow() {
+        this.view.repaint();
+        this.view.dispose();       
     }
 
 }

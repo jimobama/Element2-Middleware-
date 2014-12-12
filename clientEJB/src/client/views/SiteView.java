@@ -26,6 +26,10 @@ import helps.EJBServerConstants;
 
 import helps.View;
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.List;
 
 /**
@@ -41,6 +45,7 @@ public class SiteView extends View implements ISubject {
       private static final String CMD_DELETE_SITE = "Delete";
        private static final String CMD_SEARCH_SITE = "Search";
     private static final String CMD_IN_PROGRESS_RUNNING = "In Progress...";
+    private static  boolean Ready=false;
     
    public static final int RELOAD= 1;
    public static final int DELETE =2;
@@ -76,14 +81,19 @@ public class SiteView extends View implements ISubject {
         initGui();
         this.pack();
         
+        this.addWindowListener(new EventHandler(this));
 
     }
 
     private void initGui() {
         //initialised the form objects
         txtName = new JTextField(30);
+        txtName.addKeyListener(new EventHandler(this));
         txtSiteId = new JTextField(30);
+        txtSiteId.addKeyListener(new EventHandler(this));
+       
         cboRegion = new JComboBox<>();
+        cboRegion.addActionListener(new EventHandler(this));
         txtFlag = new JTextField(30);
         //labels
         lblName = new JLabel("Name:");
@@ -215,8 +225,7 @@ public class SiteView extends View implements ISubject {
         controller = (SiteController) observer;
         SiteModel aModel = (SiteModel) controller.getModel();
         this.tblSites.setModel(aModel.getTableModel());
-        this.controller.xhsReloadSites();
-
+      
     }
 
     public Site getSiteInfo() {
@@ -268,8 +277,7 @@ public class SiteView extends View implements ISubject {
                             JOptionPane.showMessageDialog(null,"Enter a valid site identity number please!");
                             }
                    }else
-                   aInfo.setId((long)0);
-                   
+                   aInfo.setId((long)0);                 
                     
                     
                 }
@@ -371,14 +379,14 @@ public class SiteView extends View implements ISubject {
         
     }
 
-    private class EventHandler implements ActionListener {
+    private class EventHandler implements ActionListener, WindowListener,KeyListener {
 
         private SiteView view;
 
         EventHandler(SiteView aView) {
             this.view = aView;
         }
-
+   
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getActionCommand() == null ? CMD_CREATE_SITE == null : e.getActionCommand().equals(CMD_CREATE_SITE)) {
@@ -397,9 +405,61 @@ public class SiteView extends View implements ISubject {
             }else if(e.getActionCommand().equalsIgnoreCase(SiteView.CMD_SEARCH_SITE))
             {
                 this.view.controller.xhsFindSites(this.view.getSiteInfo(true));
+            }else if(e.getSource()==cboRegion)
+            {
+                if(SiteView.Ready){
+                this.view.controller.xhsFindKeySites(this.view.getSiteInfo(true));
+                }
             }
              
 
+        }
+
+        @Override
+        public void windowOpened(WindowEvent e) {
+              this.view.controller.xhsReloadSites();
+              SiteView.Ready= true;
+
+             }
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            this.view.controller.xhsCloseWindow();
+          }
+
+        @Override
+        public void windowClosed(WindowEvent e) {
+         }
+
+        @Override
+        public void windowIconified(WindowEvent e) {
+         }
+
+        @Override
+        public void windowDeiconified(WindowEvent e) {
+         }
+
+        @Override
+        public void windowActivated(WindowEvent e) {
+          }
+
+        @Override
+        public void windowDeactivated(WindowEvent e) {
+          }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+             
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+           
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+          this.view.controller.xhsFindKeySites(this.view.getSiteInfo(true));
         }
 
     }
