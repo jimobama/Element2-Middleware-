@@ -58,9 +58,10 @@ public class SiteController extends IObserver implements Controller {
 
     @Override
     public void launch() {
-        this.view.center();
-        this.view.setResizable(false);
+        
         this.view.pack();
+        this.view.setResizable(false);        
+        this.view.center();
         this.view.setVisible(true);
     }
 

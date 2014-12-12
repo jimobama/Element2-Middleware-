@@ -109,6 +109,29 @@ public class IEntrySite implements IEntrySiteRemote {
     @Override
     public boolean updateSite(int id, Site info) {
         boolean isOkay = false;
+         try
+         {
+        if(this.isExists(info))
+          {
+            if(info.validate())
+            {
+              //create a ejb query language
+                String eql= "UPDATE Site s SET s.name=:name,s.flag=:flag,s.region=:region  WHERE s.id=:id";
+                Query query= this.siteManager.createQuery(eql);
+                query.setParameter("name", info.getName().trim().toLowerCase());
+                query.setParameter("flag", info.getFlag().trim().toLowerCase());
+                query.setParameter("region",info.getRegion().trim().toLowerCase());
+                
+                if(query.executeUpdate()>0)
+                {
+                    isOkay=true;
+                }
+            }
+         }
+         }catch(FinderException e)
+         {
+             return false;
+         }
 
         return isOkay;
     }

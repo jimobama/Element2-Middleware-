@@ -37,8 +37,8 @@ public class ClientController extends IObserver implements Controller {
     @Override
     public void launch() {
 
-        this.view.pack();
-        this.view.setSize(new Dimension(800, this.view.getHeight()));
+       //this.view.pack();
+        this.view.setSize(new Dimension(800,600));
         this.view.center();
         this.view.setVisible(true);
 
