@@ -22,7 +22,7 @@ public class PnlStructure extends javax.swing.JPanel {
     public PnlStructure() {
         initComponents();
          this.txtSiteID.setVisible(false);
-         this.pnlStruture.setVisible(false);          
+         disabled(false);          
          
         
     }
@@ -47,7 +47,7 @@ public class PnlStructure extends javax.swing.JPanel {
         btnInsertSite = new javax.swing.JButton();
         txtSiteID = new javax.swing.JTextField();
         pnlStruture = new javax.swing.JPanel();
-        jTextField4 = new javax.swing.JTextField();
+        txtStructureID = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtStructureTitle = new javax.swing.JTextField();
         cboStructureID = new javax.swing.JComboBox();
@@ -61,8 +61,8 @@ public class PnlStructure extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblStrutureInformation = new javax.swing.JTable();
-        btnCreateStructure2 = new javax.swing.JButton();
-        btnCreateStructure3 = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         jPanel1.setName("pnlLeftSide"); // NOI18N
 
@@ -137,7 +137,7 @@ public class PnlStructure extends javax.swing.JPanel {
 
         pnlStruture.setBorder(javax.swing.BorderFactory.createTitledBorder("Structure Information"));
 
-        jTextField4.setName("txtName"); // NOI18N
+        txtStructureID.setName("txtName"); // NOI18N
 
         jLabel4.setText("Structure ID:");
 
@@ -174,7 +174,7 @@ public class PnlStructure extends javax.swing.JPanel {
                     .addGroup(pnlStrutureLayout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtStructureID, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlStrutureLayout.createSequentialGroup()
                         .addGroup(pnlStrutureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -197,7 +197,7 @@ public class PnlStructure extends javax.swing.JPanel {
             .addGroup(pnlStrutureLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(pnlStrutureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtStructureID, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlStrutureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -263,12 +263,12 @@ public class PnlStructure extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblStrutureInformation);
 
-        btnCreateStructure2.setText("Refresh");
+        btnRefresh.setText("Refresh");
 
-        btnCreateStructure3.setText("Delete");
-        btnCreateStructure3.addActionListener(new java.awt.event.ActionListener() {
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCreateStructure3ActionPerformed(evt);
+                btnDeleteActionPerformed(evt);
             }
         });
 
@@ -282,9 +282,9 @@ public class PnlStructure extends javax.swing.JPanel {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnCreateStructure3, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
-                        .addComponent(btnCreateStructure2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(28, 28, 28))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -294,8 +294,8 @@ public class PnlStructure extends javax.swing.JPanel {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCreateStructure2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCreateStructure3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(19, 19, 19))
         );
 
@@ -322,14 +322,14 @@ public class PnlStructure extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoneActionPerformed
-        this.pnlStruture.setVisible(false);
+        disabled(false);
         Site site= new Site();
        this.txtSiteID.setText(site.getId().toString());
        this.txtSiteName.setText(site.getName());
        this.txtSiteRegion.setText(site.getRegion());
        this.txtFlag.setText(site.getRegion());
-       this.repaint();
-       
+      
+           
        
     }//GEN-LAST:event_btnDoneActionPerformed
 
@@ -339,17 +339,17 @@ public class PnlStructure extends javax.swing.JPanel {
     
     }//GEN-LAST:event_btnInsertSiteActionPerformed
 
-    private void btnCreateStructure3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateStructure3ActionPerformed
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnCreateStructure3ActionPerformed
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateStructure;
-    private javax.swing.JButton btnCreateStructure2;
-    private javax.swing.JButton btnCreateStructure3;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnDone;
     private javax.swing.JButton btnInsertSite;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JComboBox cboStructureID;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -362,7 +362,6 @@ public class PnlStructure extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JPanel pnlFrmSite;
     private javax.swing.JPanel pnlStruture;
     private javax.swing.JTable tblStrutureInformation;
@@ -370,6 +369,7 @@ public class PnlStructure extends javax.swing.JPanel {
     private javax.swing.JTextField txtSiteID;
     private javax.swing.JTextField txtSiteName;
     private javax.swing.JTextField txtSiteRegion;
+    private javax.swing.JTextField txtStructureID;
     private javax.swing.JTextField txtStructureTitle;
     private javax.swing.JTextArea txtaDescription_s;
     // End of variables declaration//GEN-END:variables
@@ -378,14 +378,28 @@ public class PnlStructure extends javax.swing.JPanel {
     public void attach(View observer) {
        parentView =(ClientView)observer;
     }
-
+    
+    private void disabled(boolean abool)
+    {
+        this.txtStructureTitle.setEnabled(abool);
+        this.txtaDescription_s.setEnabled(abool);
+        this.cboStructureID.setEnabled(abool);
+        this.txtStructureID.setEnabled(abool);
+        this.pnlStruture.setEnabled(abool);
+        this.btnCreateStructure.setEnabled(abool);
+        this.btnDone.setEnabled(abool);
+      
+                
+                
+    }
     void setSiteInformation(Site site) {
        this.txtSiteID.setText(site.getId().toString());
        this.txtSiteName.setText(site.getName());
        this.txtSiteRegion.setText(site.getRegion());
        this.txtFlag.setText(site.getRegion());
-       this.pnlStruture.setVisible(true);
-       this.repaint();
+       disabled(true);
+       
+     
       
       
     }

@@ -201,7 +201,7 @@
                           <Group type="102" attributes="0">
                               <Component id="jLabel4" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTextField4" min="-2" pref="153" max="-2" attributes="0"/>
+                              <Component id="txtStructureID" min="-2" pref="153" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -233,7 +233,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTextField4" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
+                          <Component id="txtStructureID" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
                           <Component id="jLabel4" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -267,7 +267,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JTextField" name="jTextField4">
+            <Component class="javax.swing.JTextField" name="txtStructureID">
               <Properties>
                 <Property name="name" type="java.lang.String" value="txtName" noResource="true"/>
               </Properties>
@@ -351,9 +351,9 @@
                       <Component id="jScrollPane1" pref="462" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          <Component id="btnCreateStructure3" min="-2" pref="97" max="-2" attributes="0"/>
+                          <Component id="btnDelete" min="-2" pref="97" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                          <Component id="btnCreateStructure2" min="-2" pref="91" max="-2" attributes="0"/>
+                          <Component id="btnRefresh" min="-2" pref="91" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -367,8 +367,8 @@
                   <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnCreateStructure2" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
-                      <Component id="btnCreateStructure3" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                      <Component id="btnRefresh" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                      <Component id="btnDelete" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               </Group>
@@ -398,17 +398,17 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="btnCreateStructure2">
+        <Component class="javax.swing.JButton" name="btnRefresh">
           <Properties>
             <Property name="text" type="java.lang.String" value="Refresh"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btnCreateStructure3">
+        <Component class="javax.swing.JButton" name="btnDelete">
           <Properties>
             <Property name="text" type="java.lang.String" value="Delete"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCreateStructure3ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

@@ -420,6 +420,12 @@ public class SiteView extends View implements ISubject {
        
     }
 
+    public void btnEnable(boolean aBoolean) {
+            this.btnCreateSite.setEnabled(aBoolean);
+            this.btnDelete.setEnabled(aBoolean);
+            this.btnUpdate.setEnabled(aBoolean);  
+    }
+
     private class EventHandler implements ActionListener, WindowListener,KeyListener {
 
         private SiteView view;

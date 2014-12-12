@@ -81,6 +81,7 @@ public class ClientController extends IObserver implements Controller {
 
         siteController = SiteController.GetInstance();
         SiteView.IsSelectMode=false;
+        this.siteController.enable();
         siteController.launch();
     }
 

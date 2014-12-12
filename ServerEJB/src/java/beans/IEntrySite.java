@@ -145,7 +145,8 @@ public class IEntrySite implements IEntrySiteRemote {
              return null;
          
          String eql ="";
-        Query query = this.siteManager.createQuery("Select s From Site s WHERE lower(s.name)=:name OR s.id=:id OR LOWER(s.region)=:region ");
+        Query query;
+        query = this.siteManager.createQuery("Select s From Site s WHERE lower(s.name)= :name OR s.id = :id OR LOWER(s.region) = :region ");
         query.setParameter("name", site.getName().toLowerCase().trim());
         query.setParameter("id",site.getId());
         query.setParameter("region", site.getRegion().toLowerCase().trim());

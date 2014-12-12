@@ -62,7 +62,7 @@ public class SiteController extends IObserver implements Controller,ISubject {
         
         this.view.pack();
         this.view.setResizable(false);        
-        this.view.center();
+        this.view.center();        
         this.view.setVisible(true);
     }
 
@@ -268,6 +268,10 @@ public class SiteController extends IObserver implements Controller,ISubject {
       
        SiteView.IsSelectMode = true;
        this.view.diableInsertionCall(a);
+    }
+
+    void enable() {
+         this.view.btnEnable(true);
     }
 
 }
