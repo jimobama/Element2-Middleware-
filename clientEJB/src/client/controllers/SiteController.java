@@ -11,6 +11,7 @@ import helps.IObserver;
 import helps.ISubject;
 import entities.Site;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -162,7 +163,7 @@ public class SiteController extends IObserver implements Controller {
     public void xhsDeleteSites() {
         
         
-        List<Site> sites = this.view.getSelectedSites();
+        List<Site> sites = this.model.getSelectedSites();       
         if(sites !=null)
         {
             model.deleteSites(sites);
@@ -175,11 +176,12 @@ public class SiteController extends IObserver implements Controller {
        
     }
 
-    public void xhsFindSites(Site siteInfo) {
+    public void xhsFindSites(Site site) {
         
-        Site site = this.view.getSiteInfo();
+  
         if(site !=null)
         {
+             
             this.model.findWidth(site);
         }     
     }

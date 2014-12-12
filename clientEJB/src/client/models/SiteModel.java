@@ -13,11 +13,13 @@ import helps.IObserver;
 import helps.ISubject;
 import helps.NetworkInfo;
 import entities.Site;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
 import javax.ejb.FinderException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -120,6 +122,7 @@ public class SiteModel implements ISubject {
             //wrapper the find method with try block
             try {
                 sites = this.entrySite.getSites();
+              
             } catch (FinderException err) {
                 this.messageError = "Site database is empty!";
             }
@@ -137,10 +140,12 @@ public class SiteModel implements ISubject {
             
             while(iter.hasNext())
             {
-                 this.entrySite.deleteSite(iter.next());
+                Site site = iter.next();
+                this.entrySite.deleteSite(site);
+                this.loadSites();
             }
             
-            this.getSites();
+          
             this.controller.update(1,"Sites successfully deleted");
         }
     }
@@ -149,17 +154,34 @@ public class SiteModel implements ISubject {
       boolean status=  this.makeConnection();
       if(status)
       {
+          
           try
           {
             sites= this.entrySite.searchSites(site);
-            this.tablemodel.fireTableDataChanged();
+            
           }
           catch(FinderException err)
           {
               this.messageError=err.getMessage();
           }
       }
+      this.tablemodel.fireTableDataChanged();
         
+    }
+
+    public List<Site> getSelectedSites() {
+      Iterator<Site> iter = this.sites.iterator();
+      List<Site> filterSites = new ArrayList<>();
+      while(iter.hasNext())
+      {
+          Site site= iter.next();
+          if(site.getStatus())
+          {
+              filterSites.add(site);
+          }
+      }
+       
+      return filterSites;
     }
 
     //the inner class for the table model
@@ -197,7 +219,41 @@ public class SiteModel implements ISubject {
         public int getColumnCount() {
             return COLUMN_COUNTS;
         }
-
+        @Override
+        public void setValueAt(Object value , int rowIndex, int columnIndex)
+        {
+           Site site = this.parent.sites.get(rowIndex);
+           if(site !=null)
+           {
+              switch(columnIndex)
+              {
+                  case TableModel.SITE_STATUS:
+                  {
+                      site.setStatus((boolean) value);
+                      
+                  }
+                  default:
+                      break;
+              }
+               
+            this.parent.sites.set(rowIndex, site);
+            this.fireTableCellUpdated(rowIndex, columnIndex);
+           }
+            
+         
+        }
+        
+        @Override
+         public boolean isCellEditable(int row, int col)
+         {
+             switch(col)
+             {
+                 case TableModel.SITE_STATUS:
+                     return true;
+                     default:
+                 return false;
+             }
+         }
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
 
@@ -219,7 +275,6 @@ public class SiteModel implements ISubject {
                     return info.getRegion();
                 case SITE_FLAG:
                     return info.getFlag();
-
                 default:
                     return null;
             }

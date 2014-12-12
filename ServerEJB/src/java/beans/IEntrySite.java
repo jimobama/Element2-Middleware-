@@ -5,6 +5,7 @@
  */
 package beans;
 
+import com.sun.xml.internal.ws.util.StringUtils;
 import entities.Site;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -26,7 +27,7 @@ public class IEntrySite implements IEntrySiteRemote {
 
     //all private fields
     private static boolean isCreate;
-    @PersistenceContext(unitName = "ServerEJBPU")
+    @PersistenceContext(unitName = helps.EJBServerConstants.Beans.PERSISTENCE_UNIT)
     private EntityManager siteManager;
     private String error;
 
@@ -40,16 +41,20 @@ public class IEntrySite implements IEntrySiteRemote {
 //the same variable
     @Override
     public synchronized boolean createSite(Site site) throws FinderException {
+        isCreate=false;
         try {
-            if (this.isExists(site) == false) {
-                this.createNewRecord(site);
-                return isCreate;
+            if (this.isExists(site) != true) {
+                
+                site.setName(site.getName().trim().toLowerCase());
+                site.setFlag(site.getFlag().trim().toLowerCase());
+                site.setRegion(site.getRegion().trim().toLowerCase());
+                this.createNewRecord(site);              
             }
         } catch (FinderException err) {
             throw err;
         }
 
-        return false;
+        return isCreate;
 
     }//end method
 
@@ -75,6 +80,7 @@ public class IEntrySite implements IEntrySiteRemote {
     @Override
     public synchronized List<Site> getSites() throws FinderException {
 
+        //this.siteManager.createQuery("DELETE From Site s ").executeUpdate();
         Query query = this.siteManager.createQuery("Select s From Site s ");
 
         List<Site> sites = query.getResultList();
@@ -86,15 +92,17 @@ public class IEntrySite implements IEntrySiteRemote {
     @Override
     public boolean deleteSite(Site info) {
         boolean isOkay = false;
-        String sql = "DELETE FROM Site as s Where s.id=:id OR s.name=:name";
+        String sql = "DELETE FROM Site s WHERE s.id=:id OR LOWER(s.name) =:name";
 
-        Query query = this.siteManager.createNamedQuery(sql);
-        query.setParameter("id", info.getId().toString());
-        query.setParameter("name", info.getName().toLowerCase());
-
-        if (query.executeUpdate() > 0) {
+        Query query = this.siteManager.createQuery(sql);
+        query.setParameter("id", info.getId());
+        query.setParameter("name", StringUtils.decapitalize(info.getName().trim().toLowerCase()));  
+       //excute the query to check the affected row;
+        int affectedRow=query.executeUpdate();
+        if (affectedRow > 0) {  
             isOkay = true;
         }
+     
         return isOkay;
     }
 
@@ -106,23 +114,31 @@ public class IEntrySite implements IEntrySiteRemote {
     }
 
     @Override
-
+   /*
+     The method find the all the sites that matches any of the site fields and return a list of the sites found
+    */
     public List<Site> searchSites(Site site) throws FinderException {
-        List<Site> sites = null;
+         if(site ==null)
+             return null;
+         
+         String eql ="";
+        Query query = this.siteManager.createQuery("Select s From Site s WHERE lower(s.name)=:name OR s.id=:id");
+        query.setParameter("name", StringUtils.decapitalize(site.getName().toLowerCase().trim()));
+        query.setParameter("id",site.getId());
 
-        String sql = "SELECT s FROM Site s Where s.id like '" + site.getId() + "' OR s.name='" + site.getName().toLowerCase() + "' OR s.flag='" + site.getFlag().toLowerCase() + "' OR s.region='" + site.getRegion().toLowerCase() + "' ";
-        Query query = this.siteManager.createNamedQuery(sql);
-        sites = query.getResultList();
+        List<Site> sites = query.getResultList();
 
         return sites;
 
     }
-
+/*
+    The method check if a site  already exists it matches with the site's name 
+    */
     @Override
     public boolean isExists(Site site) throws FinderException {
 
         boolean isOkay = false;
-        String sql = "Select s From Site s WHERE s.name ='" + site.getName().toLowerCase() + "'";
+        String sql = "Select s From Site s WHERE lower(s.name) like '" + site.getName().toLowerCase().trim() + "%' OR s.id ='"+site.getId()+"' ";
         Query q = this.siteManager.createQuery(sql);
 
         if (q.getResultList().size() > 0) {

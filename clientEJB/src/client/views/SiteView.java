@@ -71,6 +71,7 @@ public class SiteView extends View implements ISubject {
         this.setModal(true);
         initGui();
         this.pack();
+        
 
     }
 
@@ -210,6 +211,7 @@ public class SiteView extends View implements ISubject {
         controller = (SiteController) observer;
         SiteModel aModel = (SiteModel) controller.getModel();
         this.tblSites.setModel(aModel.getTableModel());
+        this.controller.xhsReloadSites();
 
     }
 
@@ -218,8 +220,68 @@ public class SiteView extends View implements ISubject {
         info.setName(this.txtName.getText());
         info.setRegion(this.cboRegion.getSelectedItem().toString());
         info.setFlag(this.txtFlag.getText());
-        //JOptionPane.showMessageDialog(null,txtFlag.getText());
+        try{
+        long id= Long.parseLong(this.txtSiteId.getText());
+        info.setId(id);
+        }catch(Exception err){
+        JOptionPane.showMessageDialog(null,"Invalid id empty , only interge value are allow");
+        }
 
+        return info;
+    }
+    
+     public Site getSiteInfo(boolean ignore) {
+        Site info = new Site();
+      
+        // an inner function class
+        class CheckInput
+        {
+            private boolean ignore;
+            CheckInput(boolean abool)
+            {
+                this.ignore=abool;
+            }
+            Site fillSiteInfo()
+            {
+                 Site aInfo=new Site();
+                 aInfo.setName(txtName.getText());
+                 aInfo.setRegion(cboRegion.getSelectedItem().toString());
+                 aInfo.setFlag(txtFlag.getText());
+        
+        
+                if(this.ignore)
+                {
+                    //check if there is a value in the site field
+                    String val=txtSiteId.getText().trim();
+                    //check if there is a value in the id fields
+                   if(!val.isEmpty())
+                    {
+                        
+                        try{
+                            long id= Long.parseLong(txtSiteId.getText().trim());
+                            aInfo.setId(id);
+                            }catch(Exception err){
+                            JOptionPane.showMessageDialog(null,"Enter a valid site identity number please!");
+                            }
+                   }else
+                   aInfo.setId((long)0);
+                   
+                    
+                    
+                }
+                
+                return aInfo;
+            }
+            
+            boolean isIgnore()
+            {
+                return ignore;
+            }
+        }//end classes
+        
+      
+        CheckInput input=new CheckInput(ignore);
+        info = input.fillSiteInfo();
         return info;
     }
 
@@ -278,7 +340,7 @@ public class SiteView extends View implements ISubject {
                 this.view.controller.xhsUpdateSites(this.view.getSiteInfo());
             }else if(e.getActionCommand().equalsIgnoreCase(SiteView.CMD_SEARCH_SITE))
             {
-                this.view.controller.xhsFindSites(this.view.getSiteInfo());
+                this.view.controller.xhsFindSites(this.view.getSiteInfo(true));
             }
              
 

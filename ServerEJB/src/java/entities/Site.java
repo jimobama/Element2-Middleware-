@@ -26,7 +26,7 @@ public class Site implements Serializable {
     private static final long serialVersionUID = 1L;
     private static String error;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+  // @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column
     private String name;
@@ -38,6 +38,7 @@ public class Site implements Serializable {
     public Site() {
         error = "";
         setStatus(false);
+        set(0, "", "", "");
     }
 
     public Long getId() {
@@ -57,10 +58,11 @@ public class Site implements Serializable {
     }
 
     //setters and getters
-    public void set(String id, String name, String reg, String f) {
+    public void set(long id, String name, String reg, String f) {
         this.setFlag(f);
         this.setName(name);
         this.setRegion(reg);
+        this.setId(id);
         error = "";
     }
 
