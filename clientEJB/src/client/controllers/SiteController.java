@@ -183,7 +183,7 @@ public class SiteController extends IObserver implements Controller {
             public void run()
             {
                model.updateSite(siteInfo);
-               view.changeProgressStatus(SiteView.DELETE, 1);
+               view.changeProgressStatus(SiteView.DELETE, 0);
             }
         };
         
