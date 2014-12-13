@@ -81,7 +81,7 @@ public class SiteModel implements ISubject {
         }
 
         this.loadSites();
-        
+
         this.controller.update(status);
 
     }
@@ -90,18 +90,9 @@ public class SiteModel implements ISubject {
         boolean isOkay = false;
         NetworkInfo netInfo = new NetworkInfo();
         netInfo.setHost(helps.EJBServerConstants.Remote.INTERNET_HOST);
+        netInfo.setPort(helps.EJBServerConstants.Remote.INTERNET_PORT);
         //catch any Number format exceptions
-        try {
-            int port = Integer.parseUnsignedInt(helps.EJBServerConstants.Remote.INTERNET_HOST.trim());
-            if (port == 0) {
-                netInfo.setPort(port);
-            }
-
-        } catch (NumberFormatException err) {
-            this.messageError = err.getMessage();
-        }
-
-        this.prop = client.Client.getProperties(netInfo);
+         this.prop = client.Client.getProperties(netInfo);
         try {
 
             this.cxt = new InitialContext(prop);
@@ -122,7 +113,7 @@ public class SiteModel implements ISubject {
             //wrapper the find method with try block
             try {
                 sites = this.entrySite.getSites();
-              
+
             } catch (FinderException err) {
                 this.messageError = "Site database is empty!";
             }
@@ -133,72 +124,60 @@ public class SiteModel implements ISubject {
     }
 
     public void deleteSites(List<Site> sites) {
-       this.makeConnection();
-        if(sites.size()> 0)
-        {
+        this.makeConnection();
+        if (sites.size() > 0) {
             Iterator<Site> iter = sites.iterator();
-            
-            while(iter.hasNext())
-            {
+
+            while (iter.hasNext()) {
                 Site site = iter.next();
                 this.entrySite.deleteSite(site);
                 this.loadSites();
             }
-            
-          
-            this.controller.update(1,"Sites successfully deleted");
+
+            this.controller.update(1, "Sites successfully deleted");
         }
     }
 
     public void findWidth(Site site) {
-      boolean status=  this.makeConnection();
-      if(status)
-      {
-          
-          try
-          {
-            sites= this.entrySite.searchSites(site);
-            
-          }
-          catch(FinderException err)
-          {
-              this.messageError=err.getMessage();
-          }
-      }
-      this.tablemodel.fireTableDataChanged();
-        
+        boolean status = this.makeConnection();
+        if (status) {
+
+            try {
+                sites = this.entrySite.searchSites(site);
+
+            } catch (FinderException err) {
+                this.messageError = err.getMessage();
+            }
+        }
+        this.tablemodel.fireTableDataChanged();
+
     }
 
     public List<Site> getSelectedSites() {
-      Iterator<Site> iter = this.sites.iterator();
-      List<Site> filterSites = new ArrayList<>();
-      while(iter.hasNext())
-      {
-          Site site= iter.next();
-          if(site.getStatus())
-          {
-              filterSites.add(site);
-          }
-      }
-       
-      return filterSites;
+        Iterator<Site> iter = this.sites.iterator();
+        List<Site> filterSites = new ArrayList<>();
+        while (iter.hasNext()) {
+            Site site = iter.next();
+            if (site.getStatus()) {
+                filterSites.add(site);
+            }
+        }
+
+        return filterSites;
     }
 
     public void updateSite(Site s) {
-       if(s !=null)
-       {
-           if(this.makeConnection())
-           {
-               if(this.entrySite.updateSite(s.getId().intValue(), s)){
-               this.loadSites();
-               this.controller.update(1,"Site as be successfully updated");
-               }else
-               {
-                  this.controller.update(0,"Site update fails please check your fields to make such the right information is passed"); 
-               }
-           }
-       }
-        
+        if (s != null) {
+            if (this.makeConnection()) {
+                if (this.entrySite.updateSite(s.getId().intValue(), s)) {
+                    this.loadSites();
+                    this.controller.update(1, "Site as be successfully updated");
+                } else {
+                    this.controller.update(0, "Site update fails please check your fields to make such the right information is passed");
+                }
+            }
+        }
+
     }
 
     //the inner class for the table model
@@ -236,41 +215,36 @@ public class SiteModel implements ISubject {
         public int getColumnCount() {
             return COLUMN_COUNTS;
         }
+
         @Override
-        public void setValueAt(Object value , int rowIndex, int columnIndex)
-        {
-           Site site = this.parent.sites.get(rowIndex);
-           if(site !=null)
-           {
-              switch(columnIndex)
-              {
-                  case TableModel.SITE_STATUS:
-                  {
-                      site.setStatus((boolean) value);
-                      
-                  }
-                  default:
-                      break;
-              }
-               
-            this.parent.sites.set(rowIndex, site);
-            this.fireTableCellUpdated(rowIndex, columnIndex);
-           }
-            
-         
+        public void setValueAt(Object value, int rowIndex, int columnIndex) {
+            Site site = this.parent.sites.get(rowIndex);
+            if (site != null) {
+                switch (columnIndex) {
+                    case TableModel.SITE_STATUS: {
+                        site.setStatus((boolean) value);
+
+                    }
+                    default:
+                        break;
+                }
+
+                this.parent.sites.set(rowIndex, site);
+                this.fireTableCellUpdated(rowIndex, columnIndex);
+            }
+
         }
-        
+
         @Override
-         public boolean isCellEditable(int row, int col)
-         {
-             switch(col)
-             {
-                 case TableModel.SITE_STATUS:
-                     return true;
-                     default:
-                 return false;
-             }
-         }
+        public boolean isCellEditable(int row, int col) {
+            switch (col) {
+                case TableModel.SITE_STATUS:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
 

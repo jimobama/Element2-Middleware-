@@ -5,7 +5,6 @@
  */
 package beans;
 
-
 import entities.Site;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -40,14 +39,14 @@ public class IEntrySite implements IEntrySiteRemote {
 //the same variable
     @Override
     public synchronized boolean createSite(Site site) throws FinderException {
-        isCreate=false;
+        isCreate = false;
         try {
             if (this.isExists(site) != true) {
-                
+
                 site.setName(site.getName().trim().toLowerCase());
                 site.setFlag(site.getFlag().trim().toLowerCase());
                 site.setRegion(site.getRegion().trim().toLowerCase());
-                this.createNewRecord(site);              
+                this.createNewRecord(site);
             }
         } catch (FinderException err) {
             throw err;
@@ -95,60 +94,56 @@ public class IEntrySite implements IEntrySiteRemote {
 
         Query query = this.siteManager.createQuery(sql);
         query.setParameter("id", info.getId());
-        query.setParameter("name",info.getName().trim().toLowerCase());  
-       //excute the query to check the affected row;
-        int affectedRow=query.executeUpdate();
-        if (affectedRow > 0) {  
+        query.setParameter("name", info.getName().trim().toLowerCase());
+        //excute the query to check the affected row;
+        int affectedRow = query.executeUpdate();
+        if (affectedRow > 0) {
             isOkay = true;
         }
-     
+
         return isOkay;
     }
 
     @Override
     public boolean updateSite(int id, Site info) {
         boolean isOkay = false;
-         try
-         {
-        if(this.isExists(info))
-          {
-            if(info.validate())
-            {
-              //create a ejb query language
-                String eql= "UPDATE Site s SET s.name=:name, s.flag=:flag, s.region=:region  WHERE s.id=:id";
-                Query query= this.siteManager.createQuery(eql);
-                query.setParameter("name", info.getName().trim().toLowerCase());
-                query.setParameter("flag", info.getFlag().trim().toLowerCase());
-                query.setParameter("region",info.getRegion().trim().toLowerCase());
-                query.setParameter("id",info.getId());
-                
-                if(query.executeUpdate()>0)
-                {
-                    isOkay=true;
+        try {
+            if (this.isExists(info)) {
+                if (info.validate()) {
+                    //create a ejb query language
+                    String eql = "UPDATE Site s SET s.name=:name, s.flag=:flag, s.region=:region  WHERE s.id=:id";
+                    Query query = this.siteManager.createQuery(eql);
+                    query.setParameter("name", info.getName().trim().toLowerCase());
+                    query.setParameter("flag", info.getFlag().trim().toLowerCase());
+                    query.setParameter("region", info.getRegion().trim().toLowerCase());
+                    query.setParameter("id", info.getId());
+
+                    if (query.executeUpdate() > 0) {
+                        isOkay = true;
+                    }
                 }
             }
-         }
-         }catch(FinderException e)
-         {
-             return false;
-         }
+        } catch (FinderException e) {
+            return false;
+        }
 
         return isOkay;
     }
 
     @Override
-   /*
+    /*
      The method find the all the sites that matches any of the site fields and return a list of the sites found
-    */
+     */
     public List<Site> searchSites(Site site) throws FinderException {
-         if(site ==null)
-             return null;
-         
-         String eql ="";
+        if (site == null) {
+            return null;
+        }
+
+        String eql = "";
         Query query;
         query = this.siteManager.createQuery("Select s From Site s WHERE lower(s.name)= :name OR s.id = :id OR LOWER(s.region) = :region ");
         query.setParameter("name", site.getName().toLowerCase().trim());
-        query.setParameter("id",site.getId());
+        query.setParameter("id", site.getId());
         query.setParameter("region", site.getRegion().toLowerCase().trim());
 
         List<Site> sites = query.getResultList();
@@ -156,14 +151,15 @@ public class IEntrySite implements IEntrySiteRemote {
         return sites;
 
     }
-/*
-    The method check if a site  already exists it matches with the site's name 
-    */
+    /*
+     The method check if a site  already exists it matches with the site's name 
+     */
+
     @Override
     public boolean isExists(Site site) throws FinderException {
 
         boolean isOkay = false;
-        String sql = "Select s From Site s WHERE lower(s.name) like '" + site.getName().toLowerCase().trim() + "%' OR s.id ='"+site.getId()+"' ";
+        String sql = "Select s From Site s WHERE lower(s.name) like '" + site.getName().toLowerCase().trim() + "%' OR s.id ='" + site.getId() + "' ";
         Query q = this.siteManager.createQuery(sql);
 
         if (q.getResultList().size() > 0) {

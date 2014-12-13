@@ -35,16 +35,18 @@ public class ClientController extends IObserver implements Controller {
         this.model.attach(this);
         this.view.attach(this);
         SiteController.GetInstance().attach(this);
-       
 
     }
 
     @Override
     public void launch() {
 
-       //this.view.pack();
-        this.view.setSize(new Dimension(800,600));
+        //this.view.pack();
+        this.view.setSize(new Dimension(800, 600));
         this.view.center();
+        this.view.pack();
+        this.view.setResizable(false);
+      
         this.view.setVisible(true);
 
     }
@@ -80,7 +82,7 @@ public class ClientController extends IObserver implements Controller {
     final public void xhsOpenNewForm() {
 
         siteController = SiteController.GetInstance();
-        SiteView.IsSelectMode=false;
+        SiteView.IsSelectMode = false;
         this.siteController.enable();
         siteController.launch();
     }
@@ -91,14 +93,14 @@ public class ClientController extends IObserver implements Controller {
     }
 
     void xhsSelectStructureSite(Site site) {
-     
-       this.view.setSiteInformation(site);
+
+        this.view.setSiteInformation(site);
     }
 
     public void xhsInsertionSettings(boolean b) {
-     siteController = SiteController.GetInstance();
-     this.siteController.callFromInsertSite(b);
-     siteController.launch();
+        siteController = SiteController.GetInstance();
+        this.siteController.callFromInsertSite(b);
+        siteController.launch();
     }
 
 }

@@ -16,12 +16,12 @@ import java.util.List;
  *
  * @author 21187498
  */
-public class SiteController extends IObserver implements Controller,ISubject {
+public class SiteController extends IObserver implements Controller, ISubject {
 
     private final SiteModel model;
     private final SiteView view;
     private static SiteController instance = null;
-    
+
     private ClientController parentController;
 
     //threads
@@ -59,10 +59,10 @@ public class SiteController extends IObserver implements Controller,ISubject {
 
     @Override
     public void launch() {
-        
+
         this.view.pack();
-        this.view.setResizable(false);        
-        this.view.center();        
+        this.view.setResizable(false);
+        this.view.center();
         this.view.setVisible(true);
     }
 
@@ -101,7 +101,6 @@ public class SiteController extends IObserver implements Controller,ISubject {
             }
         };
         handleThread(createThread);
-       
 
     }
 
@@ -114,7 +113,8 @@ public class SiteController extends IObserver implements Controller,ISubject {
         }
         view.changeCreateStatus(1);
     }
- public void update(int status,String msg) {
+
+    public void update(int status, String msg) {
         if (status == 1) {
             this.view.successMessage(msg);
         } else {
@@ -122,6 +122,7 @@ public class SiteController extends IObserver implements Controller,ISubject {
         }
         view.changeCreateStatus(1);
     }
+
     public void xhsCancelCreateSite() {
 
         try {
@@ -137,38 +138,36 @@ public class SiteController extends IObserver implements Controller,ISubject {
     }
 
     public void xhsReloadSites() {
-       
-        this.view.changeProgressStatus(SiteView.RELOAD,1);
-        Thread threadLoads= new Thread()
-        {
-            
-         @Override
-         public  void run()
-            {
-                
+
+        this.view.changeProgressStatus(SiteView.RELOAD, 1);
+        Thread threadLoads = new Thread() {
+
+            @Override
+            public void run() {
+
                 model.loadSites();
-                view.changeProgressStatus(SiteView.RELOAD,0);
+                view.changeProgressStatus(SiteView.RELOAD, 0);
             }
         };
-       
+
         this.handleThread(threadLoads);
-        
+
     }
 
     public void xhsDeleteSites() {
-     
-        this.view.changeProgressStatus(SiteView.DELETE, 1);
-        Thread tDel= new Thread(){
-        
-            public void run(){
-            List<Site> sites = model.getSelectedSites();       
-            if(sites !=null)
-            {
-                model.deleteSites(sites);
-                view.changeProgressStatus(SiteView.DELETE, 0);
 
-            }else
-             view.errorMessage("Please select a site to delete");
+        this.view.changeProgressStatus(SiteView.DELETE, 1);
+        Thread tDel = new Thread() {
+
+            public void run() {
+                List<Site> sites = model.getSelectedSites();
+                if (sites != null) {
+                    model.deleteSites(sites);
+                    view.changeProgressStatus(SiteView.DELETE, 0);
+
+                } else {
+                    view.errorMessage("Please select a site to delete");
+                }
             }
         };
         this.handleThread(tDel);
@@ -176,102 +175,93 @@ public class SiteController extends IObserver implements Controller,ISubject {
 
     public void xhsUpdateSites(Site siteInfo) {
         this.view.changeProgressStatus(SiteView.UPDATE, 1);
-        if(siteInfo ==null)
-            return ;
+        if (siteInfo == null) {
+            return;
+        }
         //update the site information with the following ID;
-        Thread tUpdate= new Thread()
-        {
-            public void run()
-            {
-               model.updateSite(siteInfo);
-               view.changeProgressStatus(SiteView.DELETE, 0);
+        Thread tUpdate = new Thread() {
+            public void run() {
+                model.updateSite(siteInfo);
+                view.changeProgressStatus(SiteView.DELETE, 0);
             }
         };
-        
+
         this.handleThread(tUpdate);
-       
+
     }
 
-    public void xhsFindSites(Site site) {        
-  
-        if(site !=null)
-        {  
+    public void xhsFindSites(Site site) {
+
+        if (site != null) {
             this.view.changeProgressStatus(SiteView.SEARCH, 1);
-            Thread t= new Thread()
-            {
-                public void run(){
-                model.findWidth(site);
-                view.changeProgressStatus(SiteView.SEARCH, 0);
+            Thread t = new Thread() {
+                public void run() {
+                    model.findWidth(site);
+                    view.changeProgressStatus(SiteView.SEARCH, 0);
                 }
             };
             this.handleThread(t);
-        }     
+        }
     }
 
-     public void xhsFindKeySites(Site site) {        
-  
-        if(site !=null)
-        {  
-           
-            Thread t= new Thread()
-            {
-                public void run(){
-                model.findWidth(site);              
+    public void xhsFindKeySites(Site site) {
+
+        if (site != null) {
+
+            Thread t = new Thread() {
+                public void run() {
+                    model.findWidth(site);
                 }
             };
             this.handleThread(t);
-        }     
-    }
-    private void handleThread(Thread t) {
-        
-       try
-        {
-         t.join();
-         t.start();      
         }
-        catch(Exception err)
-        {
+    }
+
+    private void handleThread(Thread t) {
+
+        try {
+            t.join();
+            t.start();
+        } catch (Exception err) {
             this.view.errorMessage(err.getMessage());
         }
     }
 
     public void xhsCloseWindow() {
         this.view.repaint();
-        this.view.dispose();       
+        this.view.dispose();
     }
 
     public void xhsSelectedSites() {
-       List<Site> selectedSites= this.model.getSelectedSites();      
-      
-       if(selectedSites.size()>1)
-       {
-         this.update(0, "Multiply selection of site is not allow");
-         return ;
-       }
-      if(selectedSites.size()<=0)     
-          return ;
-       // else processor the sites.
-       Site site= selectedSites.iterator().next();
-     
-       this.parentController.xhsSelectStructureSite(site);
-      
-       
-       
+        List<Site> selectedSites = this.model.getSelectedSites();
+
+        if (selectedSites.size() > 1) {
+            this.update(0, "Multiply selection of site is not allow");
+            return;
+        }
+        if (selectedSites.size() <= 0) {
+            return;
+        }
+        // else processor the sites.
+        Site site = selectedSites.iterator().next();
+
+        this.parentController.xhsSelectStructureSite(site);
+
     }
 
     @Override
     public void attach(IObserver observer) {
-        parentController = (ClientController)observer;
+        parentController = (ClientController) observer;
     }
 
     void callFromInsertSite(boolean a) {
-      
-       SiteView.IsSelectMode = true;
-       this.view.diableInsertionCall(a);
+
+        SiteView.IsSelectMode = true;
+        this.view.diableInsertionCall(a);
     }
 
     void enable() {
-         this.view.btnEnable(true);
+        this.view.btnEnable(true);
     }
 
 }

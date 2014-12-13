@@ -24,38 +24,35 @@ import javax.persistence.Query;
 public class IEntryStructure implements IEntryStructureRemote {
 
     @PersistenceContext(unitName = helps.EJBServerConstants.Beans.PERSISTENCE_UNIT)
-     EntityManager structureManager;
-    private static boolean isCreate=false;
+    EntityManager structureManager;
+    private static boolean isCreate = false;
+
     public IEntryStructure() {
-        
+
     }
 
-   
-    
     @Override
     public List<Structure> getStructures() {
-      //this.siteManager.createQuery("DELETE From Site s ").executeUpdate();
+        //this.siteManager.createQuery("DELETE From Site s ").executeUpdate();
         Query query = this.structureManager.createQuery("Select s From Structure s ");
 
-        List<Structure> s =(List<Structure>) query.getResultList();
+        List<Structure> s = (List<Structure>) query.getResultList();
 
         return s;
     }
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-
     @Override
-    public boolean createStructure(Structure parameter)throws FinderException
-    {
-       isCreate=false;
-       if (this.isExists(parameter) != true) {
-           
-           parameter.setType(parameter.getType().trim().toLowerCase());
-           parameter.setLocation(parameter.getLocation().trim().toLowerCase());
-           parameter.setDescription(parameter.getDescription().trim().toLowerCase());
-           this.createNewRecord(parameter);
-       }
+    public boolean createStructure(Structure parameter) throws FinderException {
+        isCreate = false;
+        if (this.isExists(parameter) != true) {
+
+            parameter.setType(parameter.getType().trim().toLowerCase());
+            parameter.setLocation(parameter.getLocation().trim().toLowerCase());
+            parameter.setDescription(parameter.getDescription().trim().toLowerCase());
+            this.createNewRecord(parameter);
+        }
 
         return isCreate;
     }
@@ -66,10 +63,10 @@ public class IEntryStructure implements IEntryStructureRemote {
         String sql = "Select s From Structure s WHERE (lower(s.id)=:id AND lower(s.siteId) =:siteID) OR  (lower(s.id)=:id AND lower(s.siteId) =:siteID AND lower"
                 + "(s.type)=:type";
         Query q = this.structureManager.createQuery(sql);
-              q.setParameter("id",struct.getId());
-              q.setParameter("siteID", struct.getSiteId());
-              q.setParameter("type", struct.getType().trim().toLowerCase());
-             //check the number of query returns
+        q.setParameter("id", struct.getId());
+        q.setParameter("siteID", struct.getSiteId());
+        q.setParameter("type", struct.getType().trim().toLowerCase());
+        //check the number of query returns
         if (q.getResultList().size() > 0) {
             isOkay = true;
         }
@@ -80,19 +77,19 @@ public class IEntryStructure implements IEntryStructureRemote {
 
     @Override
     public boolean delete(Structure s) throws FinderException {
-         boolean isOkay = false;
-        String sql = "DELETE FROM Site s WHERE (s.id=:id) AND (LOWER(s.type) =:type OR  s.siteId =:siteid)" ;
+        boolean isOkay = false;
+        String sql = "DELETE FROM Site s WHERE (s.id=:id) AND (LOWER(s.type) =:type OR  s.siteId =:siteid)";
 
         Query query = this.structureManager.createQuery(sql);
         query.setParameter("id", s.getId());
-        query.setParameter("type",s.getType().trim().toLowerCase());  
-        query.setParameter("siteid",s.getSiteId()); 
-       //excute the query to check the affected row;
-        int affectedRow=query.executeUpdate();
-        if (affectedRow > 0) {  
+        query.setParameter("type", s.getType().trim().toLowerCase());
+        query.setParameter("siteid", s.getSiteId());
+        //excute the query to check the affected row;
+        int affectedRow = query.executeUpdate();
+        if (affectedRow > 0) {
             isOkay = true;
         }
-     
+
         return isOkay;
     }
 
@@ -101,7 +98,5 @@ public class IEntryStructure implements IEntryStructureRemote {
         this.structureManager.persist(parameter);
         isCreate = true;
     }
-    
-    
-    
+
 }

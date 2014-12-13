@@ -18,8 +18,11 @@ import javax.ejb.Remote;
 public interface IEntryStructureRemote {
 
     List<Structure> getStructures() throws FinderException;
-    boolean createStructure(Structure parameter)throws FinderException;
+
+    boolean createStructure(Structure parameter) throws FinderException;
+
     boolean isExists(Structure struct) throws FinderException;
+
     boolean delete(Structure s) throws FinderException;
-    
+
 }

@@ -40,23 +40,23 @@ import javax.swing.BoxLayout;
  * @author 21187498
  */
 public class SiteView extends View implements ISubject {
-    
-    public static boolean IsSelectMode=false;
+
+    public static boolean IsSelectMode = false;
 
     private static final String CMD_CREATE_SITE = "Create";
     private static final String CMD_CREATE_SITE_RUNNING = "Cancel";
     private static final String CMD_REFERSH_SITE = "Refresh";
-     private static final String CMD_UPDATE_SITE = "Update";
-      private static final String CMD_DELETE_SITE = "Delete";
-       private static final String CMD_SEARCH_SITE = "Search";
+    private static final String CMD_UPDATE_SITE = "Update";
+    private static final String CMD_DELETE_SITE = "Delete";
+    private static final String CMD_SEARCH_SITE = "Search";
     private static final String CMD_IN_PROGRESS_RUNNING = "In Progress...";
-    private static final String CMD_ADD_STRUCTURE_IN ="Select";
-    private static  boolean Ready=false;
-    
-   public static final int RELOAD= 1;
-   public static final int DELETE =2;
-   public static final int SEARCH=3;
-   public static final int UPDATE =4;
+    private static final String CMD_ADD_STRUCTURE_IN = "Select";
+    private static boolean Ready = false;
+
+    public static final int RELOAD = 1;
+    public static final int DELETE = 2;
+    public static final int SEARCH = 3;
+    public static final int UPDATE = 4;
     //defined the form object for the sites
     private JPanel pnlTable;
     private JTable tblSites;
@@ -76,7 +76,7 @@ public class SiteView extends View implements ISubject {
     private JButton btnSearch;
     private JButton btnDelete;
     private JButton btnUpdate;
-    private JButton btnreferesh;    
+    private JButton btnreferesh;
     private JButton btnSelectSite;
     SiteController controller;
 
@@ -87,7 +87,7 @@ public class SiteView extends View implements ISubject {
         this.setModal(true);
         initGui();
         this.pack();
-        
+
         this.addWindowListener(new EventHandler(this));
 
     }
@@ -98,7 +98,7 @@ public class SiteView extends View implements ISubject {
         txtName.addKeyListener(new EventHandler(this));
         txtSiteId = new JTextField(30);
         txtSiteId.addKeyListener(new EventHandler(this));
-       
+
         cboRegion = new JComboBox<>();
         cboRegion.addActionListener(new EventHandler(this));
         txtFlag = new JTextField(30);
@@ -110,11 +110,11 @@ public class SiteView extends View implements ISubject {
         //buttons
 
         btnCreateSite = new JButton(CMD_CREATE_SITE);
-        this.btnDelete= new JButton(CMD_DELETE_SITE);
+        this.btnDelete = new JButton(CMD_DELETE_SITE);
         this.btnSearch = new JButton(CMD_SEARCH_SITE);
-        this.btnUpdate= new JButton(CMD_UPDATE_SITE);
-        this.btnreferesh= new JButton(SiteView.CMD_REFERSH_SITE);
-        this.btnSelectSite=new JButton(CMD_ADD_STRUCTURE_IN);
+        this.btnUpdate = new JButton(CMD_UPDATE_SITE);
+        this.btnreferesh = new JButton(SiteView.CMD_REFERSH_SITE);
+        this.btnSelectSite = new JButton(CMD_ADD_STRUCTURE_IN);
         btnSelectSite.addActionListener(new EventHandler(this));
 
         //add the controls to the panel
@@ -186,10 +186,8 @@ public class SiteView extends View implements ISubject {
         this.pnlTable = new JPanel();
         this.tblSites = new JTable();
         this.jsclSite = new JScrollPane(this.tblSites);
-        this.jsclSite.setPreferredSize(new Dimension(500,300));
+        this.jsclSite.setPreferredSize(new Dimension(500, 300));
         this.pnlTable.add(this.jsclSite);
-
-       
 
         //add the site table to
         JPanel pnlButtons = new JPanel();
@@ -198,28 +196,27 @@ public class SiteView extends View implements ISubject {
         gc.gridx = 1;
         gc.gridy = 4;
         gc.gridwidth = 2;
-        pnlButtons.add( this.btnCreateSite);
+        pnlButtons.add(this.btnCreateSite);
         pnlButtons.add(this.btnUpdate);
-         pnlButtons.add(this.btnDelete);
-         pnlButtons.add(this.btnSearch);
-         pnlButtons.add(this.btnreferesh);
-           
-        EventHandler btnEvt =new EventHandler(this);
+        pnlButtons.add(this.btnDelete);
+        pnlButtons.add(this.btnSearch);
+        pnlButtons.add(this.btnreferesh);
+
+        EventHandler btnEvt = new EventHandler(this);
         this.btnCreateSite.addActionListener(btnEvt);
         this.btnDelete.addActionListener(btnEvt);
         this.btnSearch.addActionListener(btnEvt);
         this.btnUpdate.addActionListener(btnEvt);
         this.btnreferesh.addActionListener(btnEvt);
-        this.pnlForm.add( pnlButtons, gc);
-        
+        this.pnlForm.add(pnlButtons, gc);
+
         gc.anchor = GridBagConstraints.NORTHWEST;
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.gridx = 0;
         gc.gridy = 5;
         gc.gridwidth = 3;
         this.pnlForm.add(this.pnlTable, gc);
-        
-     
+
         gc.anchor = GridBagConstraints.NORTHEAST;
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.gridx = 2;
@@ -227,18 +224,17 @@ public class SiteView extends View implements ISubject {
         gc.gridwidth = 1;
         JPanel pnlBottom = new JPanel();
         pnlBottom.setLayout(new BorderLayout());
-        this.btnSelectSite.setPreferredSize(new Dimension(100,20));
-        pnlBottom.add(this.btnSelectSite,BorderLayout.EAST);       
+        this.btnSelectSite.setPreferredSize(new Dimension(100, 20));
+        pnlBottom.add(this.btnSelectSite, BorderLayout.EAST);
         this.btnSelectSite.setVisible(IsSelectMode);
-        this.pnlForm.add( pnlBottom,gc);
-       
+        this.pnlForm.add(pnlBottom, gc);
 
         //add the controls to the window       
         GridBagConstraints mainGC = new GridBagConstraints();
         mainGC.anchor = GridBagConstraints.NORTHWEST;
         mainGC.fill = GridBagConstraints.HORIZONTAL;
         mainGC.gridx = 0;
-        mainGC.gridy = 0;         
+        mainGC.gridy = 0;
         this.add(this.pnlForm, mainGC);
 
     }
@@ -248,7 +244,7 @@ public class SiteView extends View implements ISubject {
         controller = (SiteController) observer;
         SiteModel aModel = (SiteModel) controller.getModel();
         this.tblSites.setModel(aModel.getTableModel());
-      
+
     }
 
     public Site getSiteInfo() {
@@ -256,66 +252,61 @@ public class SiteView extends View implements ISubject {
         info.setName(this.txtName.getText());
         info.setRegion(this.cboRegion.getSelectedItem().toString());
         info.setFlag(this.txtFlag.getText());
-        try{
-        long id= Long.parseLong(this.txtSiteId.getText());
-        info.setId(id);
-        }catch(Exception err){
-        JOptionPane.showMessageDialog(null,"Invalid id empty , only interge value are allow");
+        try {
+            long id = Long.parseLong(this.txtSiteId.getText());
+            info.setId(id);
+        } catch (Exception err) {
+            JOptionPane.showMessageDialog(null, "Invalid id empty , only interge value are allow");
         }
 
         return info;
     }
-    
-     public Site getSiteInfo(boolean ignore) {
+
+    public Site getSiteInfo(boolean ignore) {
         Site info = new Site();
-      
+
         // an inner function class
-        class CheckInput
-        {
+        class CheckInput {
+
             private boolean ignore;
-            CheckInput(boolean abool)
-            {
-                this.ignore=abool;
+
+            CheckInput(boolean abool) {
+                this.ignore = abool;
             }
-            Site fillSiteInfo()
-            {
-                 Site aInfo=new Site();
-                 aInfo.setName(txtName.getText());
-                 aInfo.setRegion(cboRegion.getSelectedItem().toString());
-                 aInfo.setFlag(txtFlag.getText());
-        
-        
-                if(this.ignore)
-                {
+
+            Site fillSiteInfo() {
+                Site aInfo = new Site();
+                aInfo.setName(txtName.getText());
+                aInfo.setRegion(cboRegion.getSelectedItem().toString());
+                aInfo.setFlag(txtFlag.getText());
+
+                if (this.ignore) {
                     //check if there is a value in the site field
-                    String val=txtSiteId.getText().trim();
+                    String val = txtSiteId.getText().trim();
                     //check if there is a value in the id fields
-                   if(!val.isEmpty())
-                    {
-                        
-                        try{
-                            long id= Long.parseLong(txtSiteId.getText().trim());
+                    if (!val.isEmpty()) {
+
+                        try {
+                            long id = Long.parseLong(txtSiteId.getText().trim());
                             aInfo.setId(id);
-                            }catch(Exception err){
-                            JOptionPane.showMessageDialog(null,"Enter a valid site identity number please!");
-                            }
-                   }else
-                   aInfo.setId((long)0);                 
-                    
-                    
+                        } catch (Exception err) {
+                            JOptionPane.showMessageDialog(null, "Enter a valid site identity number please!");
+                        }
+                    } else {
+                        aInfo.setId((long) 0);
+                    }
+
                 }
-                
+
                 return aInfo;
             }
-            
-            boolean isIgnore()
-            {
+
+            boolean isIgnore() {
                 return ignore;
             }
         }//end classes
-        
-      
-        CheckInput input=new CheckInput(ignore);
+
+        CheckInput input = new CheckInput(ignore);
         info = input.fillSiteInfo();
         return info;
     }
@@ -347,181 +338,168 @@ public class SiteView extends View implements ISubject {
     }
 
     public List<Site> getSelectedSites() {
-       return null;
+        return null;
     }
 
     public void changeProgressStatus(int what, int i) {
-      
-        class StatusChanger
-        {
+
+        class StatusChanger {
+
             String value;
-            StatusChanger(String changeValue)
-            {
-                value=changeValue;
+
+            StatusChanger(String changeValue) {
+                value = changeValue;
             }
-            void toNormal()
-            {
-               btnDelete.setText(CMD_DELETE_SITE);
-               btnSearch.setText(CMD_SEARCH_SITE);
-               btnUpdate.setText(CMD_UPDATE_SITE);
-               btnreferesh.setText(SiteView.CMD_REFERSH_SITE);
+
+            void toNormal() {
+                btnDelete.setText(CMD_DELETE_SITE);
+                btnSearch.setText(CMD_SEARCH_SITE);
+                btnUpdate.setText(CMD_UPDATE_SITE);
+                btnreferesh.setText(SiteView.CMD_REFERSH_SITE);
             }
-            void change(int awhat)
-            {
-               switch(awhat)
-                    {
-                        case SiteView.RELOAD:
-                            btnreferesh.setText(value);
-                            break;
-                         case SiteView.DELETE:
-                            btnDelete.setText(value);
-                            break;
-                         case SiteView.UPDATE:
-                            btnUpdate.setText(value);
-                            break;
-                         case SiteView.SEARCH:
-                             btnSearch.setText(value);
-                             break;
-                         default:
-                             break;                     
-                   
-                    } //end switch
+
+            void change(int awhat) {
+                switch (awhat) {
+                    case SiteView.RELOAD:
+                        btnreferesh.setText(value);
+                        break;
+                    case SiteView.DELETE:
+                        btnDelete.setText(value);
+                        break;
+                    case SiteView.UPDATE:
+                        btnUpdate.setText(value);
+                        break;
+                    case SiteView.SEARCH:
+                        btnSearch.setText(value);
+                        break;
+                    default:
+                        break;
+
+                } //end switch
             }
-            
+
         }//end fucntion class
-        
-       //check if to change back from progress or not
+
+        //check if to change back from progress or not
         StatusChanger changer = new StatusChanger(SiteView.CMD_IN_PROGRESS_RUNNING);
-        if(i==1)
-        {
-           changer.change(what);
-        }else
-        {
+        if (i == 1) {
+            changer.change(what);
+        } else {
             changer.toNormal();
         }
-        
+
     }
 
     public void diableInsertionCall(boolean aBoolean) {
-           if(aBoolean)  {         
+        if (aBoolean) {
             this.btnSelectSite.setVisible(false);
-           }else
-           {
-              this.btnSelectSite.setVisible(true); 
-           }
-            this.btnCreateSite.setEnabled(aBoolean);
-            this.btnDelete.setEnabled(aBoolean);
-            this.btnUpdate.setEnabled(aBoolean);            
-            this.repaint();
-            this.pack();
-            this.revalidate();
-            
-       
-       
+        } else {
+            this.btnSelectSite.setVisible(true);
+        }
+        this.btnCreateSite.setEnabled(aBoolean);
+        this.btnDelete.setEnabled(aBoolean);
+        this.btnUpdate.setEnabled(aBoolean);
+        this.repaint();
+        this.pack();
+        this.revalidate();
+
     }
 
     public void btnEnable(boolean aBoolean) {
-            this.btnCreateSite.setEnabled(aBoolean);
-            this.btnDelete.setEnabled(aBoolean);
-            this.btnUpdate.setEnabled(aBoolean);  
+        this.btnCreateSite.setEnabled(aBoolean);
+        this.btnDelete.setEnabled(aBoolean);
+        this.btnUpdate.setEnabled(aBoolean);
     }
 
-    private class EventHandler implements ActionListener, WindowListener,KeyListener {
+    private class EventHandler implements ActionListener, WindowListener, KeyListener {
 
         private SiteView view;
 
         EventHandler(SiteView aView) {
             this.view = aView;
         }
-   
+
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getActionCommand() == null ? CMD_CREATE_SITE == null : e.getActionCommand().equals(CMD_CREATE_SITE)) {
                 this.view.controller.xhsCreateSite();
             } else if (e.getActionCommand().equalsIgnoreCase(CMD_CREATE_SITE_RUNNING)) {
                 this.view.controller.xhsCancelCreateSite();
-            } else if(e.getActionCommand().equalsIgnoreCase(SiteView.CMD_REFERSH_SITE))
-            {
+            } else if (e.getActionCommand().equalsIgnoreCase(SiteView.CMD_REFERSH_SITE)) {
                 this.view.controller.xhsReloadSites();
-            }else if(e.getActionCommand().equalsIgnoreCase(SiteView.CMD_DELETE_SITE))
-            {
+            } else if (e.getActionCommand().equalsIgnoreCase(SiteView.CMD_DELETE_SITE)) {
                 this.view.controller.xhsDeleteSites();
-            }else if(e.getActionCommand().equalsIgnoreCase(SiteView.CMD_UPDATE_SITE))
-            {
+            } else if (e.getActionCommand().equalsIgnoreCase(SiteView.CMD_UPDATE_SITE)) {
                 this.view.controller.xhsUpdateSites(this.view.getSiteInfo());
-            }else if(e.getActionCommand().equalsIgnoreCase(SiteView.CMD_SEARCH_SITE))
-            {
+            } else if (e.getActionCommand().equalsIgnoreCase(SiteView.CMD_SEARCH_SITE)) {
                 this.view.controller.xhsFindSites(this.view.getSiteInfo(true));
-            }else if(e.getSource()==cboRegion)
-            {
-                if(SiteView.Ready){
-                this.view.controller.xhsFindKeySites(this.view.getSiteInfo(true));
+            } else if (e.getSource() == cboRegion) {
+                if (SiteView.Ready) {
+                    this.view.controller.xhsFindKeySites(this.view.getSiteInfo(true));
                 }
-            }else if(e.getActionCommand().equalsIgnoreCase(SiteView.CMD_ADD_STRUCTURE_IN))
-            {
-                if(SiteView.Ready){
-                     SiteView.IsSelectMode=false;
-                     this.view.btnSelectSite.setVisible(false);
-                     this.view.repaint();
-                     this.view.pack();
-                     this.view.dispose();
+            } else if (e.getActionCommand().equalsIgnoreCase(SiteView.CMD_ADD_STRUCTURE_IN)) {
+                if (SiteView.Ready) {
+                    SiteView.IsSelectMode = false;
+                    this.view.btnSelectSite.setVisible(false);
+                    this.view.repaint();
+                    this.view.pack();
+                    this.view.dispose();
                     this.view.controller.xhsSelectedSites();
-                    
+
                 }
             }
-             
 
         }
 
         @Override
         public void windowOpened(WindowEvent e) {
-              this.view.controller.xhsReloadSites();
-              SiteView.Ready= true;
+            this.view.controller.xhsReloadSites();
+            SiteView.Ready = true;
 
-             }
+        }
 
         @Override
         public void windowClosing(WindowEvent e) {
-             SiteView.IsSelectMode=false;
-             this.view.btnSelectSite.setVisible(false);
-             this.view.repaint();
-             this.view.pack();
+            SiteView.IsSelectMode = false;
+            this.view.btnSelectSite.setVisible(false);
+            this.view.repaint();
+            this.view.pack();
             this.view.controller.xhsCloseWindow();
-          }
+        }
 
         @Override
         public void windowClosed(WindowEvent e) {
-         }
+        }
 
         @Override
         public void windowIconified(WindowEvent e) {
-         }
+        }
 
         @Override
         public void windowDeiconified(WindowEvent e) {
-         }
+        }
 
         @Override
         public void windowActivated(WindowEvent e) {
-          }
+        }
 
         @Override
         public void windowDeactivated(WindowEvent e) {
-          }
+        }
 
         @Override
         public void keyTyped(KeyEvent e) {
-             
+
         }
 
         @Override
         public void keyPressed(KeyEvent e) {
-           
+
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-          this.view.controller.xhsFindKeySites(this.view.getSiteInfo(true));
+            this.view.controller.xhsFindKeySites(this.view.getSiteInfo(true));
         }
 
     }

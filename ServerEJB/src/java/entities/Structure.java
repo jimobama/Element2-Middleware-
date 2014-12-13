@@ -18,18 +18,19 @@ import javax.persistence.Transient;
  * @author Obaro I. Johnson
  */
 @Entity
-@Table(name="Structure")
+@Table(name = "Structure")
 public class Structure implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private  String type;
+    private String type;
     private String description;
     private String location;
     private Long siteId;
-   @Transient private boolean status;
-    
+    @Transient
+    private boolean status;
 
     public Long getId() {
         return id;
@@ -103,5 +104,5 @@ public class Structure implements Serializable {
     public void setSiteId(Long siteId) {
         this.siteId = siteId;
     }
-    
+
 }

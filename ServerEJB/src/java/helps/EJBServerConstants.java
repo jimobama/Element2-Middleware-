@@ -21,7 +21,8 @@ public interface EJBServerConstants {
 
         public final static String IEntrySite = "IEntrySite/remote";
         public final static String ICONNECTION = "IConnection/remote";
-        public final static String PERSISTENCE_UNIT ="ServerEJBPU";
+        public final static String IEntryStructure ="IEntryStructure/remote";
+        public final static String PERSISTENCE_UNIT = "ServerEJBPU";
     }
 
     //RANKS

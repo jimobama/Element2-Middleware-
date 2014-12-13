@@ -26,7 +26,7 @@ public class Site implements Serializable {
     private static final long serialVersionUID = 1L;
     private static String error;
     @Id
-  // @GeneratedValue(strategy = GenerationType.AUTO)
+    // @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column
     private String name;

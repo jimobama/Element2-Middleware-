@@ -16,15 +16,15 @@ import helps.View;
 public class PnlStructure extends javax.swing.JPanel {
 
     private ClientView parentView;
+
     /**
      * Creates new form PnlStructure
      */
     public PnlStructure() {
         initComponents();
-         this.txtSiteID.setVisible(false);
-         disabled(false);          
-         
-        
+        this.txtSiteID.setVisible(false);
+        disabled(false);
+
     }
 
     /**
@@ -323,26 +323,23 @@ public class PnlStructure extends javax.swing.JPanel {
 
     private void btnDoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoneActionPerformed
         disabled(false);
-        Site site= new Site();
-       this.txtSiteID.setText(site.getId().toString());
-       this.txtSiteName.setText(site.getName());
-       this.txtSiteRegion.setText(site.getRegion());
-       this.txtFlag.setText(site.getRegion());
-      
-           
-       
+        Site site = new Site();
+        this.txtSiteID.setText(site.getId().toString());
+        this.txtSiteName.setText(site.getName());
+        this.txtSiteRegion.setText(site.getRegion());
+        this.txtFlag.setText(site.getRegion());
+
     }//GEN-LAST:event_btnDoneActionPerformed
 
     private void btnInsertSiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertSiteActionPerformed
-     ClientController controller =(ClientController)  this.parentView.xhsCallController();
-     controller.xhsInsertionSettings(false);
-    
+        ClientController controller = (ClientController) this.parentView.xhsCallController();
+        controller.xhsInsertionSettings(false);
+
     }//GEN-LAST:event_btnInsertSiteActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnDeleteActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateStructure;
@@ -374,13 +371,11 @@ public class PnlStructure extends javax.swing.JPanel {
     private javax.swing.JTextArea txtaDescription_s;
     // End of variables declaration//GEN-END:variables
 
-   
     public void attach(View observer) {
-       parentView =(ClientView)observer;
+        parentView = (ClientView) observer;
     }
-    
-    private void disabled(boolean abool)
-    {
+
+    private void disabled(boolean abool) {
         this.txtStructureTitle.setEnabled(abool);
         this.txtaDescription_s.setEnabled(abool);
         this.cboStructureID.setEnabled(abool);
@@ -388,19 +383,15 @@ public class PnlStructure extends javax.swing.JPanel {
         this.pnlStruture.setEnabled(abool);
         this.btnCreateStructure.setEnabled(abool);
         this.btnDone.setEnabled(abool);
-      
-                
-                
+
     }
+
     void setSiteInformation(Site site) {
-       this.txtSiteID.setText(site.getId().toString());
-       this.txtSiteName.setText(site.getName());
-       this.txtSiteRegion.setText(site.getRegion());
-       this.txtFlag.setText(site.getRegion());
-       disabled(true);
-       
-     
-      
-      
+        this.txtSiteID.setText(site.getId().toString());
+        this.txtSiteName.setText(site.getName());
+        this.txtSiteRegion.setText(site.getRegion());
+        this.txtFlag.setText(site.getRegion());
+        disabled(true);
+
     }
 }
