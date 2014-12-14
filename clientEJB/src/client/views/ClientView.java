@@ -6,6 +6,7 @@ package client.views;
 
 import client.controllers.ClientController;
 import entities.Site;
+import entities.Structure;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -33,6 +34,7 @@ import helps.IObserver;
 import helps.ISubject;
 
 import helps.View;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -62,7 +64,7 @@ public class ClientView extends View implements ISubject {
     private JMenu mSiteManager;
 
     private JMenuItem iMNewSite;
-    private PnlStructure pnlMainStructure;
+    private PnlStructure pnlMainStructure=null;
 
     private JMenu mNetwork;
     private JMenuItem iMProxySettings;
@@ -77,7 +79,7 @@ public class ClientView extends View implements ISubject {
         ICON_FILE_MENU = this.getClass().getResource("../resources/file_icon_menu.png");
         ICON_TEST_NETWORK = this.getClass().getResource("../resources/test_network.png");
         APP_ICON = this.getClass().getResource("../resources/app_icon.png");
-
+        
         this.initGui();
         this.setTitle(title);
 
@@ -86,13 +88,15 @@ public class ClientView extends View implements ISubject {
     @Override
     public void attach(IObserver observer) {
         this.controller = (ClientController) observer;
+        
+         pnlMainStructure.attach(this);
+         this.repaint();
+        
     }
 
     private void initGui() {
 
         pnlMainStructure = new PnlStructure();
-
-        pnlMainStructure.attach(this);
         this.setLayout(new BorderLayout());
         this.contentLayout = new GridBagLayout();
         this.content = new JPanel();
@@ -215,6 +219,14 @@ public class ClientView extends View implements ISubject {
 
     public void setSiteInformation(Site site) {
         this.pnlMainStructure.setSiteInformation(site);
+    }
+
+    public Structure getStructure() {
+        return this.pnlMainStructure.getStructureDetails();
+    }
+
+    public void setCreateText(String txt) {
+    this.pnlMainStructure.setCreateButton(txt);
     }
 
     private class CustomizeWindowAdaptor extends WindowAdapter {

@@ -14,6 +14,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,7 +24,7 @@ import javax.persistence.Query;
 @Remote(IEntryStructureRemote.class)
 public class IEntryStructure implements IEntryStructureRemote {
 
-    @PersistenceContext(unitName = helps.EJBServerConstants.Beans.PERSISTENCE_UNIT)
+     @PersistenceContext(unitName = helps.EJBServerConstants.Beans.PERSISTENCE_UNIT)
     EntityManager structureManager;
     private static boolean isCreate = false;
 
@@ -60,8 +61,9 @@ public class IEntryStructure implements IEntryStructureRemote {
     @Override
     public boolean isExists(Structure struct) {
         boolean isOkay = false;
-        String sql = "Select s From Structure s WHERE (lower(s.id)=:id AND lower(s.siteId) =:siteID) OR  (lower(s.id)=:id AND lower(s.siteId) =:siteID AND lower"
-                + "(s.type)=:type";
+        String sql = "Select s From Structure s WHERE (lower(s.id)=:id AND lower(s.siteId) =:siteID) "
+                + " OR  (lower(s.id)=:id AND lower(s.siteId) =:siteID AND lower"
+                + "(s.type)=:type)";
         Query q = this.structureManager.createQuery(sql);
         q.setParameter("id", struct.getId());
         q.setParameter("siteID", struct.getSiteId());
@@ -78,12 +80,11 @@ public class IEntryStructure implements IEntryStructureRemote {
     @Override
     public boolean delete(Structure s) throws FinderException {
         boolean isOkay = false;
-        String sql = "DELETE FROM Site s WHERE (s.id=:id) AND (LOWER(s.type) =:type OR  s.siteId =:siteid)";
+        String sql = "DELETE FROM Structure s WHERE s.id=:id";
 
         Query query = this.structureManager.createQuery(sql);
         query.setParameter("id", s.getId());
-        query.setParameter("type", s.getType().trim().toLowerCase());
-        query.setParameter("siteid", s.getSiteId());
+       
         //excute the query to check the affected row;
         int affectedRow = query.executeUpdate();
         if (affectedRow > 0) {
@@ -93,10 +94,18 @@ public class IEntryStructure implements IEntryStructureRemote {
         return isOkay;
     }
 
-    private void createNewRecord(Structure parameter) {
+    private void createNewRecord(Structure s) {
         isCreate = false;
-        this.structureManager.persist(parameter);
-        isCreate = true;
+        try
+        {
+           
+        this.structureManager.persist(s);
+         isCreate = true;
+        }catch(Exception err)
+        {
+         err.printStackTrace();
+        }
+      
     }
 
 }

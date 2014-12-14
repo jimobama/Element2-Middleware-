@@ -11,6 +11,6 @@ package helps;
 public class IObserver {
 
     public void update(int status) {
-
+          
     }
 }

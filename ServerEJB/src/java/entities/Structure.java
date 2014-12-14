@@ -5,6 +5,7 @@
  */
 package entities;
 
+import helps.Validator;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,15 +23,18 @@ import javax.persistence.Transient;
 public class Structure implements Serializable {
 
     private static final long serialVersionUID = 1L;
+   
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String type;
     private String description;
     private String location;
+    private String name;
     private Long siteId;
     @Transient
     private boolean status;
+    @Transient private String error;
 
     public Long getId() {
         return id;
@@ -104,5 +108,46 @@ public class Structure implements Serializable {
     public void setSiteId(Long siteId) {
         this.siteId = siteId;
     }
+
+    public boolean validated() {
+      boolean isOkay =false;
+     if(this.getName().trim().isEmpty() || !Validator.isMatch("^[a-zA-Z\\_0-9 ]+$", name))
+     {
+       this.error= "Invalid structure name please specify a valid one please!";
+     }
+    else if(!Validator.isMatch("^[a-zA-Z\\_ 0-9]+$", this.getType().trim()) || this.getType().trim().isEmpty())
+      {
+          this.error="The character entered in the type field is invalid!";
+          
+      }
+      else if(this.getDescription().isEmpty())
+      {
+            this.error="Please enter a description for the structure!";
+      }else if(this.getLocation().isEmpty())
+      {
+          this.error="Please enter a valid location address for the site including the postcode!";
+      }else
+      {
+          isOkay=true;
+      }
+      
+      return isOkay;
+    }
+    
+    
+    public String getErrorMessage()
+    {
+        return error;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+   
 
 }
