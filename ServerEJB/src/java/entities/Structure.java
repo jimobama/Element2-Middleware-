@@ -34,8 +34,7 @@ public class Structure implements Serializable {
     private String location;
     private String name;
     
-    @OneToMany
-    @JoinColumn(name="id")
+  
     private Long siteId;
     @Transient
     private boolean status;

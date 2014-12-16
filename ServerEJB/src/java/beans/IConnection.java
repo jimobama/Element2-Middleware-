@@ -18,7 +18,7 @@ import org.jboss.beans.metadata.api.annotations.Start;
 public class IConnection implements IConnectionRemote {
 
     @Override
-    @Start
+
     public boolean connect(String connectionString) {
         return true;
     }
