@@ -13,6 +13,7 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface IConnectionRemote {
-
+    //add the initial annotation
+	
     boolean connect(String connectionString);
 }

@@ -9,6 +9,8 @@ import entities.Site;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.Remote;
+
+
 import javax.ejb.FinderException;
 
 import javax.persistence.EntityManager;
@@ -28,9 +30,9 @@ public class IEntrySite implements IEntrySiteRemote {
     @PersistenceContext(unitName = helps.EJBServerConstants.Beans.PERSISTENCE_UNIT)
     private EntityManager siteManager;
     private String error;
-
+    
+	
     public IEntrySite() {
-
         isCreate = false;
 
     }
@@ -38,6 +40,7 @@ public class IEntrySite implements IEntrySiteRemote {
 //Using the synchronized modifier to avoid prevent interference of client trying to modifier or create a site with same id or accessing
 //the same variable
     @Override
+   	
     public synchronized boolean createSite(Site site) throws FinderException {
         isCreate = false;
         try {
@@ -76,6 +79,7 @@ public class IEntrySite implements IEntrySiteRemote {
     }
 
     @Override
+   // @OnSucess
     public synchronized List<Site> getSites() throws FinderException {
 
         //this.siteManager.createQuery("DELETE From Site s ").executeUpdate();
@@ -105,6 +109,8 @@ public class IEntrySite implements IEntrySiteRemote {
     }
 
     @Override
+	//@OnSucess
+	//@OnException
     public boolean updateSite(int id, Site info) {
         boolean isOkay = false;
         try {
@@ -134,6 +140,8 @@ public class IEntrySite implements IEntrySiteRemote {
     /*
      The method find the all the sites that matches any of the site fields and return a list of the sites found
      */
+	
+   // @OnException
     public List<Site> searchSites(Site site) throws FinderException {
         if (site == null) {
             return null;
@@ -154,7 +162,7 @@ public class IEntrySite implements IEntrySiteRemote {
     /*
      The method check if a site  already exists it matches with the site's name 
      */
-
+   
     @Override
     public boolean isExists(Site site) throws FinderException {
 
