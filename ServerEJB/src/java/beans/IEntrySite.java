@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import javax.ejb.Remote;
 
 
+
 import javax.ejb.FinderException;
 
 import javax.persistence.EntityManager;
@@ -177,5 +178,8 @@ public class IEntrySite implements IEntrySiteRemote {
         return isOkay;
 
     }
+    
+    
+    
 
 }

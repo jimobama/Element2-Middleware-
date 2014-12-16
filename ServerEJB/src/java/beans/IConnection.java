@@ -7,6 +7,7 @@ package beans;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import org.jboss.beans.metadata.api.annotations.Start;
 
 /**
  *
@@ -17,6 +18,7 @@ import javax.ejb.Stateless;
 public class IConnection implements IConnectionRemote {
 
     @Override
+    @Start
     public boolean connect(String connectionString) {
         return true;
     }

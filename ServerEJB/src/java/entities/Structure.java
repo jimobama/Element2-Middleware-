@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -31,6 +33,9 @@ public class Structure implements Serializable {
     private String description;
     private String location;
     private String name;
+    
+    @OneToMany
+    @JoinColumn(name="id")
     private Long siteId;
     @Transient
     private boolean status;

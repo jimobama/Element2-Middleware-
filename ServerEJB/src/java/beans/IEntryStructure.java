@@ -5,7 +5,6 @@
  */
 package beans;
 
-import entities.Site;
 import entities.Structure;
 import java.util.List;
 import javax.ejb.FinderException;
@@ -14,13 +13,13 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author Obaro I. Johnson
  */
 @Stateless
+
 @Remote(IEntryStructureRemote.class)
 public class IEntryStructure implements IEntryStructureRemote {
 

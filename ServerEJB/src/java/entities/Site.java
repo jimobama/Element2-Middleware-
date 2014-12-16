@@ -10,6 +10,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -19,12 +20,15 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "Site")
+
 public class Site implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static String error;
-    @Id
+    
     // @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+   
     private Long id;
     @Column
     private String name;
