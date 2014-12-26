@@ -77,6 +77,7 @@ public class StructureModel implements ISubject {
         //validation here
         if (this.makeConnection()) {
             try {
+               
                 isokay = this.entryStructure.createStructure(s);
                 if (isokay == true) {
                     status = 1;
@@ -86,8 +87,8 @@ public class StructureModel implements ISubject {
             }
 
         }
-
-        this.loadStructure();
+         
+        this.controller.xhsUpdateStructureTable(s.getSiteId());
         return isokay;
 
     }
