@@ -8,8 +8,9 @@ package beans;
 import entities.Structure;
 import java.util.List;
 import javax.ejb.FinderException;
-import javax.ejb.Local;
 import javax.ejb.Remote;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.naming.NamingException;
 
 /**
@@ -17,7 +18,7 @@ import javax.naming.NamingException;
  * @author Obaro I. Johnson
  */
 @Remote
-
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public interface IEntrySiteRemote {
 
     public boolean createSite(entities.Site site) throws FinderException;
