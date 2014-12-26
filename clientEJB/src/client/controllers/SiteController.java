@@ -10,7 +10,9 @@ import helps.Controller;
 import helps.IObserver;
 import helps.ISubject;
 import entities.Site;
+import entities.Structure;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -262,6 +264,10 @@ public class SiteController extends IObserver implements Controller, ISubject {
 
     void enable() {
         this.view.btnEnable(true);
+    }
+
+    public List<Structure> getStructures(Long id) {
+        return this.model.getStructures(id);
     }
 
 }

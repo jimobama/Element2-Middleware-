@@ -5,15 +5,13 @@
  */
 package beans;
 
-import javax.ejb.Remote;
-
 /**
  *
  * @author Obaro I. Johnson
  */
-@Remote
-public interface IConnectionRemote {
-    //add the initial annotation
+class ArrayList<T> {
 
-    boolean connect(String connectionString);
+    public ArrayList() {
+    }
+
 }

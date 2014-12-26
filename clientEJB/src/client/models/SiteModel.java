@@ -13,9 +13,12 @@ import helps.IObserver;
 import helps.ISubject;
 import helps.NetworkInfo;
 import entities.Site;
+import entities.Structure;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.FinderException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -92,7 +95,7 @@ public class SiteModel implements ISubject {
         netInfo.setHost(helps.EJBServerConstants.Remote.INTERNET_HOST);
         netInfo.setPort(helps.EJBServerConstants.Remote.INTERNET_PORT);
         //catch any Number format exceptions
-         this.prop = client.Client.getProperties(netInfo);
+        this.prop = client.Client.getProperties(netInfo);
         try {
 
             this.cxt = new InitialContext(prop);
@@ -178,6 +181,26 @@ public class SiteModel implements ISubject {
             }
         }
 
+    }
+
+    public List<Structure> getStructures(Long id) {
+
+        List<Structure> structures = null;
+        if (this.makeConnection()) {
+            Integer ID = (int) (long) id;
+
+            try {
+                structures = this.entrySite.getStructures(ID);
+
+            } catch (FinderException ex) {
+                Logger.getLogger(SiteModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NamingException ex) {
+                Logger.getLogger(SiteModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+        return structures;
     }
 
     //the inner class for the table model

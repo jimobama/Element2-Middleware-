@@ -27,7 +27,6 @@ public class ClientController extends IObserver implements Controller {
     private ClientView view;
     private ProxySettingController proxyController;
     private SiteController siteController;
-  
 
     static public boolean IsConnected = false;
 
@@ -37,7 +36,7 @@ public class ClientController extends IObserver implements Controller {
         //the attachment of the controller
         this.model.attach(this);
         this.view.attach(this);
-        
+
         SiteController.GetInstance().attach(this);
 
     }
@@ -50,39 +49,33 @@ public class ClientController extends IObserver implements Controller {
         this.view.center();
         this.view.pack();
         this.view.setResizable(false);
-      
+
         this.view.setVisible(true);
 
     }
-    
-    private void createNewStructure()
-    {
-        Structure struc= this.view.getStructure();
-        if(!struc.validated())
-        {
-            this.displayMessageType(0,struc.getErrorMessage());
-            return ;
+
+    private void createNewStructure() {
+        Structure struc = this.view.getStructure();
+        if (!struc.validated()) {
+            this.displayMessageType(0, struc.getErrorMessage());
+            return;
         }
         //every thing is okay
-        Thread t= new Thread()
-                {
-                    @Override
-                   public void run()
-                   {
-                    boolean status = model.createStructure(struc);
-                    if(status)
-                        {
-                          displayMessageType(1,"Structure as be successfully add to server database!");
-                        }else
-                        displayMessageType(0,model.getErrorMessage());
-                   }
-                };
-        
-        
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                boolean status = model.createStructure(struc);
+                if (status) {
+                    displayMessageType(1, "Structure as be successfully add to server database!");
+                } else {
+                    displayMessageType(0, model.getErrorMessage());
+                }
+            }
+        };
+
         //now run the thread
         this.handleThread(t);
-        
-        
+
     }
 
     @Override
@@ -127,8 +120,8 @@ public class ClientController extends IObserver implements Controller {
     }
 
     void xhsSelectStructureSite(Site site) {
-
         this.view.setSiteInformation(site);
+
     }
 
     public void xhsInsertionSettings(boolean b) {
@@ -138,93 +131,97 @@ public class ClientController extends IObserver implements Controller {
     }
 
     private void displayMessageType(int i, String errorMessage) {
-       if(i==1)
-       {
-           JOptionPane.showMessageDialog(this.view, errorMessage,"Information",JOptionPane.INFORMATION_MESSAGE);
-       }else
-       {
-            JOptionPane.showMessageDialog(this.view, errorMessage,"Error",JOptionPane.ERROR_MESSAGE);
-       }
+        if (i == 1) {
+            JOptionPane.showMessageDialog(this.view, errorMessage, "Information", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this.view, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void handleThread(Thread t) {
-        
-        try
-        {
+
+        try {
             t.join();
             t.start();
-        }catch(Exception err)
-        {
-            this.displayMessageType(0,err.getMessage());
+        } catch (Exception err) {
+            this.displayMessageType(0, err.getMessage());
         }
     }
 
     public void xhsCreateNewStructure(Structure structure) {
-        
-        if(!structure.validated()){
-               this.displayMessageType(0, structure.getErrorMessage());
-               return ;
+
+        if (!structure.validated()) {
+            this.displayMessageType(0, structure.getErrorMessage());
+            return;
         }
         this.view.setCreateText(PnlStructure.IN_PROGRESS_CREATE_STRUCTURE);
-        Thread t= new Thread(){
-            
+        Thread t = new Thread() {
+
             @Override
-            public void run(){
-                     boolean isOkay=   model.createStructure(structure);
-                     view.setCreateText(PnlStructure.CREATE_STRUCTURE);
-                     if(isOkay)
-                     {
-                         displayMessageType(1,"Site successfully created!");
-                     }else
-                     {
-                         displayMessageType(0,"Site fail to created");
-                     }
-                  }
-       
+            public void run() {
+                boolean isOkay = model.createStructure(structure);
+                view.setCreateText(PnlStructure.CREATE_STRUCTURE);
+                if (isOkay) {
+                    displayMessageType(1, "Site successfully created!");
+                } else {
+                    displayMessageType(0, "Site fail to created");
+                }
+            }
+
         };
-        
+
         //run the thread
         this.handleThread(t);
-        
-        
+
     }
 
     public void xhsRefreshStructureTable() {
-        
-       Thread t= new Thread(){
-           public void run(){
-                model.reloadStructure();
-                
-           }
-       };
-       
-       // execute the thread
-       this.handleThread(t);
-    }
 
+        Thread t = new Thread() {
+            public void run() {
+                model.reloadStructure();
+
+            }
+        };
+
+        // execute the thread
+        this.handleThread(t);
+    }
 
     public void xhsDeleteStructure() {
-        
-         List<Structure> structures=(List<Structure>)  this.model.getSelectedStructures();
-         if(structures ==null)
-         {
-             this.displayMessageType(0, "Please select structure to delete!");
-             return ;
-         }
-         
-         //create and rull the delete on a thread
-         Thread t= new Thread()
-         {
-             public void run()
-             {
-               model.deleteStructures(structures); 
-             }
-         };
-         //Handle the thread
-         this.handleThread(t);
-        
+
+        List<Structure> structures = (List<Structure>) this.model.getSelectedStructures();
+        if (structures == null) {
+            this.displayMessageType(0, "Please select structure to delete!");
+            return;
+        }
+
+        //create and rull the delete on a thread
+        Thread t = new Thread() {
+            public void run() {
+                model.deleteStructures(structures);
+
+            }
+        };
+        //Handle the thread
+        this.handleThread(t);
+
     }
-    
- 
+
+    public void xhsUpdateStructureTable(Long id) {
+        Thread t = new Thread() {
+            public void run() {
+                //this will set and reload the site structure tables
+                siteController = SiteController.GetInstance();
+                List<Structure> s = siteController.getStructures(id);
+
+                model.setStructures(s);
+
+            }
+        };
+        //Handle the thread
+        this.handleThread(t);
+
+    }
 
 }

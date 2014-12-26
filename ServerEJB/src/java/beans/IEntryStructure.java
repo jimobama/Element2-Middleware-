@@ -8,7 +8,6 @@ package beans;
 import entities.Structure;
 import java.util.List;
 import javax.ejb.FinderException;
-import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,11 +18,9 @@ import javax.persistence.Query;
  * @author Obaro I. Johnson
  */
 @Stateless
-
-@Remote(IEntryStructureRemote.class)
 public class IEntryStructure implements IEntryStructureRemote {
 
-     @PersistenceContext(unitName = helps.EJBServerConstants.Beans.PERSISTENCE_UNIT)
+    @PersistenceContext(unitName = helps.EJBServerConstants.Beans.PERSISTENCE_UNIT)
     EntityManager structureManager;
     private static boolean isCreate = false;
 
@@ -83,7 +80,7 @@ public class IEntryStructure implements IEntryStructureRemote {
 
         Query query = this.structureManager.createQuery(sql);
         query.setParameter("id", s.getId());
-       
+
         //excute the query to check the affected row;
         int affectedRow = query.executeUpdate();
         if (affectedRow > 0) {
@@ -95,16 +92,24 @@ public class IEntryStructure implements IEntryStructureRemote {
 
     private void createNewRecord(Structure s) {
         isCreate = false;
-        try
-        {
-           
-        this.structureManager.persist(s);
-         isCreate = true;
-        }catch(Exception err)
-        {
-         err.printStackTrace();
+        try {
+
+            this.structureManager.persist(s);
+            isCreate = true;
+        } catch (Exception err) {
+            err.printStackTrace();
         }
-      
+
     }
 
+    @Override
+    public List<Structure> getStructures(int siteiD) throws FinderException {
+        //this.siteManager.createQuery("DELETE From Site s ").executeUpdate();
+        long id = (long) siteiD;
+        Query query = this.structureManager.createQuery("Select s From Structure s WHERE lower(s.siteId)=:id");
+        query.setParameter("id", id);
+        List<Structure> s = (List<Structure>) query.getResultList();
+
+        return s;
+    }
 }

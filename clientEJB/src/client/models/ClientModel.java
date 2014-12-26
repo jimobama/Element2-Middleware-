@@ -18,10 +18,11 @@ import javax.swing.table.AbstractTableModel;
 public class ClientModel implements ISubject {
 
     ClientController controller;
-     StructureModel modelStructure;
+    StructureModel modelStructure;
     private String error;
+
     public ClientModel() {
-      modelStructure= new   StructureModel();      
+        modelStructure = new StructureModel();
     }
 
     @Override
@@ -31,18 +32,18 @@ public class ClientModel implements ISubject {
     }
 
     public boolean createStructure(Structure struc) {
-               
-         return this.modelStructure.createStructure(struc);
-     
+
+        return this.modelStructure.createStructure(struc);
+
     }
 
     public String getErrorMessage() {
-       return this.error;
+        return this.error;
     }
 
     public AbstractTableModel getStructureTableModel() {
-        
-          return this.modelStructure.getAbstractTableModel();
+
+        return this.modelStructure.getAbstractTableModel();
     }
 
     public void reloadStructure() {
@@ -50,11 +51,19 @@ public class ClientModel implements ISubject {
     }
 
     public List<Structure> getSelectedStructures() {
-     return this.modelStructure.getSelectedStructures();
+        return this.modelStructure.getSelectedStructures();
     }
 
     public void deleteStructures(List<Structure> structures) {
-       this.modelStructure.deleteStructures(structures);
+        this.modelStructure.deleteStructures(structures);
+    }
+
+    public void reloadStructure(Long id) {
+        this.modelStructure.loadStructure(id);
+    }
+
+    public void setStructures(List<Structure> s) {
+        this.modelStructure.setStructures(s);
     }
 
 }

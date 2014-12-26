@@ -21,8 +21,9 @@ public class PnlStructure extends javax.swing.JPanel {
 
     private ClientView parentView;
     private ClientController controller;
-    public static final String CREATE_STRUCTURE="Create Structure";
-     public static final String IN_PROGRESS_CREATE_STRUCTURE="In progress...";
+    public static final String CREATE_STRUCTURE = "Create Structure";
+    public static final String IN_PROGRESS_CREATE_STRUCTURE = "In progress...";
+
     /**
      * Creates new form PnlStructure
      */
@@ -356,15 +357,16 @@ public class PnlStructure extends javax.swing.JPanel {
 
         int siteID = this.getSiteId();
         Structure structure = this.getStructureInfo();
-        if(structure !=null){
-        structure.setSiteId((long)siteID);
-        this.controller.xhsCreateNewStructure(structure);}
-        else
-            JOptionPane.showMessageDialog(null,"Enter valid information of the structure and make such id is a number greater than  1");
+        if (structure != null) {
+            structure.setSiteId((long) siteID);
+            this.controller.xhsCreateNewStructure(structure);
+        } else {
+            JOptionPane.showMessageDialog(null, "Enter valid information of the structure and make such id is a number greater than  1");
+        }
     }//GEN-LAST:event_btnCreateStructureActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-       this.controller.xhsRefreshStructureTable();
+        this.controller.xhsRefreshStructureTable();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -404,9 +406,8 @@ public class PnlStructure extends javax.swing.JPanel {
         controller = (ClientController) this.parentView.xhsCallController();
         ClientModel model = (ClientModel) controller.getModel();
         tblStrutureInformation.setModel(model.getStructureTableModel());
-         this.controller.xhsRefreshStructureTable();
+        this.controller.xhsRefreshStructureTable();
         tblStrutureInformation.repaint();
-        
 
     }
 
@@ -426,6 +427,10 @@ public class PnlStructure extends javax.swing.JPanel {
         this.txtSiteName.setText(site.getName());
         this.txtSiteRegion.setText(site.getRegion());
         this.txtFlag.setText(site.getRegion());
+        //update the table with the list of sites structures
+
+        this.controller.xhsUpdateStructureTable(site.getId());
+
         disabled(true);
 
     }
@@ -452,7 +457,7 @@ public class PnlStructure extends javax.swing.JPanel {
     }
 
     private int getSiteId() {
-        int id= 0;
+        int id = 0;
         try {
             id = Integer.parseInt(this.txtSiteID.getText().trim());
         } catch (Exception err) {
@@ -463,35 +468,36 @@ public class PnlStructure extends javax.swing.JPanel {
     }
 
     private Structure getStructureInfo() {
-        Structure s= new Structure();
-        
-        int Id =  this.getStructureID();
-        if(Id <= 0){return null;}
-        
-       s.setId((long)Id);
-       s.setDescription(this.txtaDescription_s.getText());
-       s.setLocation(this.txtStructureLocation.getText());
-       s.setName(this.txtStructureTitle.getText());
-       s.setStatus(false);
-       s.setType(this.cboStructureID.getSelectedItem().toString());
-       return s;
+        Structure s = new Structure();
+
+        int Id = this.getStructureID();
+        if (Id <= 0) {
+            return null;
+        }
+
+        s.setId((long) Id);
+        s.setDescription(this.txtaDescription_s.getText());
+        s.setLocation(this.txtStructureLocation.getText());
+        s.setName(this.txtStructureTitle.getText());
+        s.setStatus(false);
+        s.setType(this.cboStructureID.getSelectedItem().toString());
+        return s;
     }
 
-    public void setCreateButton(String s)
-    {
+    public void setCreateButton(String s) {
         this.btnCreateStructure.setText(s);
     }
+
     private int getStructureID() {
-         int id =-1;
-        try{
+        int id = -1;
+        try {
             id = (int) Long.parseLong(this.txtStructureID.getText().trim());
-        }catch(Exception err)
-        {
-           
+        } catch (Exception err) {
+
         }
-        
+
         return id;
-       
+
     }
 
 }

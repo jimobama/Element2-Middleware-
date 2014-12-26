@@ -64,7 +64,7 @@ public class ClientView extends View implements ISubject {
     private JMenu mSiteManager;
 
     private JMenuItem iMNewSite;
-    private PnlStructure pnlMainStructure=null;
+    private PnlStructure pnlMainStructure = null;
 
     private JMenu mNetwork;
     private JMenuItem iMProxySettings;
@@ -79,7 +79,7 @@ public class ClientView extends View implements ISubject {
         ICON_FILE_MENU = this.getClass().getResource("../resources/file_icon_menu.png");
         ICON_TEST_NETWORK = this.getClass().getResource("../resources/test_network.png");
         APP_ICON = this.getClass().getResource("../resources/app_icon.png");
-        
+
         this.initGui();
         this.setTitle(title);
 
@@ -88,10 +88,10 @@ public class ClientView extends View implements ISubject {
     @Override
     public void attach(IObserver observer) {
         this.controller = (ClientController) observer;
-        
-         pnlMainStructure.attach(this);
-         this.repaint();
-        
+
+        pnlMainStructure.attach(this);
+        this.repaint();
+
     }
 
     private void initGui() {
@@ -226,7 +226,7 @@ public class ClientView extends View implements ISubject {
     }
 
     public void setCreateText(String txt) {
-    this.pnlMainStructure.setCreateButton(txt);
+        this.pnlMainStructure.setCreateButton(txt);
     }
 
     private class CustomizeWindowAdaptor extends WindowAdapter {

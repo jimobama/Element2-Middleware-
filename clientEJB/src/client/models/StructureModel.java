@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.FinderException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -33,9 +35,9 @@ public class StructureModel implements ISubject {
     private TableModel tablemodel;
 
     StructureModel() {
-            structures=new ArrayList<>();
-            tablemodel= new TableModel(this);
-           
+        structures = new ArrayList<>();
+        tablemodel = new TableModel(this);
+
     }
 
     @Override
@@ -43,37 +45,33 @@ public class StructureModel implements ISubject {
         controller = (ClientController) observer;
     }
 
-    public AbstractTableModel getAbstractTableModel()
-    {
-        
+    public AbstractTableModel getAbstractTableModel() {
+
         return this.tablemodel;
     }
     // the method that will call the remote stub and intialised it 
-    
-    private boolean makeConnection()
-    {
-        boolean isOkay=false;
-        helps.NetworkInfo info =new  helps.NetworkInfo();
+
+    private boolean makeConnection() {
+        boolean isOkay = false;
+        helps.NetworkInfo info = new helps.NetworkInfo();
         info.setHost(helps.EJBServerConstants.Remote.INTERNET_HOST);
-        info.setPort(helps.EJBServerConstants.Remote.INTERNET_PORT);        
-        this.prop= client.Client.getProperties(info);
-        try
-        {
-            this.cxt= new InitialContext(prop);
-            this.entryStructure = (beans.IEntryStructureRemote)this.cxt.lookup(helps.EJBServerConstants.Beans.IEntryStructure);
-            isOkay=true;
-        }catch(NamingException err)
-        {
+        info.setPort(helps.EJBServerConstants.Remote.INTERNET_PORT);
+        this.prop = client.Client.getProperties(info);
+        try {
+            this.cxt = new InitialContext(prop);
+            this.entryStructure = (beans.IEntryStructureRemote) this.cxt.lookup(helps.EJBServerConstants.Beans.IEntryStructure);
+            isOkay = true;
+        } catch (NamingException err) {
             isOkay = false;
             err.printStackTrace();
         }
-        
+
         return isOkay;
-        
+
     }
 
     boolean createStructure(Structure s) {
-     
+
         boolean isokay = false;
         int status = 0;
         //validation here
@@ -95,8 +93,8 @@ public class StructureModel implements ISubject {
     }
 
     void loadStructure() {
-         this.structures = this.getStructures();
-         this.tablemodel.fireTableDataChanged();
+        this.structures = this.getStructures();
+        this.tablemodel.fireTableDataChanged();
     }
 
     private List<Structure> getStructures() {
@@ -107,97 +105,120 @@ public class StructureModel implements ISubject {
                 structs = this.entryStructure.getStructures();
 
             } catch (FinderException err) {
-                this.error= "Site database is empty!";
+                this.error = "Site database is empty!";
             }
         }
 
-        return structs ;
+        return structs;
+    }
+
+    private List<Structure> getStructures(int id) {
+        List<Structure> structs = null;
+        if (this.makeConnection()) {
+            try {
+                //wrapper the find method with try block                
+                structs = this.entryStructure.getStructures(id);
+            } catch (FinderException ex) {
+                Logger.getLogger(StructureModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+        return structs;
     }
 
     List<Structure> getSelectedStructures() {
-      List<Structure> structs=new ArrayList<>();
-      
-      Iterator<Structure> iter= this.structures.iterator();     
-      
-      while(iter.hasNext())
-      {
-          Structure s=  iter.next();
-          if(s.isStatus())
-              structs.add(s);
-      }
+        List<Structure> structs = new ArrayList<>();
+
+        Iterator<Structure> iter = this.structures.iterator();
+
+        while (iter.hasNext()) {
+            Structure s = iter.next();
+            if (s.isStatus()) {
+                structs.add(s);
+            }
+        }
         return structs;
     }
 
     void deleteStructures(List<Structure> structures) {
-        
-        if(this.makeConnection())
-        {
-            Iterator<Structure> iter= structures.iterator();
-            while(iter.hasNext())
-            {
-                try{
-                this.entryStructure.delete(iter.next());
-                this.loadStructure();
-                }catch(FinderException err)
-                {
+
+        if (this.makeConnection()) {
+            Iterator<Structure> iter = structures.iterator();
+            while (iter.hasNext()) {
+                try {
+                    this.entryStructure.delete(iter.next());
+                    this.loadStructure();
+                } catch (FinderException err) {
                     err.printStackTrace();
                 }
             }
-            
+
         }
-     
+
     }
-    
-    
-    
-    
-    
-    private class TableModel extends AbstractTableModel
-    {
-        private static final int  COLUMN_COUNT=6;
-        private static final int ID=0;
-         private static final int TYPE=1;
-          private static final int DESCRIPTION=2;
-           private static final int LOCATION=3;
-            private static final int SITE_ID=4;
-             private static final int STATUS=5;
-        
+
+    void loadStructure(Long id) {
+        Integer ID = (int) (long) id;
+        this.structures = this.getStructures(ID);
+        this.tablemodel.fireTableDataChanged();
+        javax.swing.JOptionPane.showMessageDialog(null, "I am here " + id);
+    }
+
+    void setStructures(List<Structure> s) {
+        if (s != null) {
+            this.structures = s;
+        }
+        this.tablemodel.fireTableDataChanged();
+    }
+
+    private class TableModel extends AbstractTableModel {
+
+        private static final int COLUMN_COUNT = 6;
+        private static final int ID = 0;
+        private static final int TYPE = 1;
+        private static final int DESCRIPTION = 2;
+        private static final int LOCATION = 3;
+        private static final int SITE_ID = 4;
+        private static final int STATUS = 5;
+
         private final StructureModel parent;
-   TableModel(StructureModel  mParent)
-   {
-      parent= mParent;
-   }
+
+        TableModel(StructureModel mParent) {
+            parent = mParent;
+        }
+
         @Override
         public int getRowCount() {
-           return this.parent.structures.size();
+            return this.parent.structures.size();
         }
 
         @Override
         public int getColumnCount() {
-           return  COLUMN_COUNT;
+            return COLUMN_COUNT;
         }
-        
+
         @Override
         public Class<?> getColumnClass(int col) {
             switch (col) {
                 case TableModel.ID:
-                       return long.class;
-                   case TableModel.TYPE:
-                       return String.class;
-                   case TableModel.DESCRIPTION:
-                       return String.class;
-                   case TableModel.LOCATION:
-                       return String.class;
-                   case TableModel.SITE_ID:
-                       return String.class;
-                   case TableModel.STATUS:
-                       return Boolean.class;
-                   default:
-                       return null;
+                    return long.class;
+                case TableModel.TYPE:
+                    return String.class;
+                case TableModel.DESCRIPTION:
+                    return String.class;
+                case TableModel.LOCATION:
+                    return String.class;
+                case TableModel.SITE_ID:
+                    return String.class;
+                case TableModel.STATUS:
+                    return Boolean.class;
+                default:
+                    return null;
             }
         }
-        
-          @Override
+
+        @Override
         public boolean isCellEditable(int row, int col) {
             switch (col) {
                 case TableModel.STATUS:
@@ -206,29 +227,28 @@ public class StructureModel implements ISubject {
                     return false;
             }
         }
+
         @Override
-         public String getColumnName(int col)
-         {
-              switch(col)
-               {
-                   case TableModel.ID:
-                       return "ID";
-                   case TableModel.TYPE:
-                       return "Type";
-                   case TableModel.DESCRIPTION:
-                       return "Description";
-                   case TableModel.LOCATION:
-                       return "Address";
-                   case TableModel.SITE_ID:
-                       return "Site Id";
-                   case TableModel.STATUS:
-                       return "Options";
-                   default:
-                       return null;
-               }
-         }
-         
-             @Override
+        public String getColumnName(int col) {
+            switch (col) {
+                case TableModel.ID:
+                    return "ID";
+                case TableModel.TYPE:
+                    return "Type";
+                case TableModel.DESCRIPTION:
+                    return "Description";
+                case TableModel.LOCATION:
+                    return "Address";
+                case TableModel.SITE_ID:
+                    return "Site Id";
+                case TableModel.STATUS:
+                    return "Options";
+                default:
+                    return null;
+            }
+        }
+
+        @Override
         public void setValueAt(Object value, int rowIndex, int columnIndex) {
             Structure s = this.parent.structures.get(rowIndex);
             if (s != null) {
@@ -246,33 +266,33 @@ public class StructureModel implements ISubject {
             }
 
         }
+
         @Override
-        public Object getValueAt(int rowIndex, int columnIndex)
-        {
-           Structure s =(Structure) this.parent.structures.get(rowIndex);
-           if(s ==null)
-            return null;
-           
-               switch(columnIndex)
-               {
-                   case TableModel.ID:
-                       return s.getId();
-                   case TableModel.TYPE:
-                       return s.getType();
-                   case TableModel.DESCRIPTION:
-                       return s.getDescription();
-                   case TableModel.LOCATION:
-                       return s.getLocation();
-                   case TableModel.SITE_ID:
-                       return s.getSiteId();
-                   case TableModel.STATUS:
-                       return s.isStatus();
-                   default:
-                       return null;
-               }
-           
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Structure s = (Structure) this.parent.structures.get(rowIndex);
+            if (s == null) {
+                return null;
+            }
+
+            switch (columnIndex) {
+                case TableModel.ID:
+                    return s.getId();
+                case TableModel.TYPE:
+                    return s.getType();
+                case TableModel.DESCRIPTION:
+                    return s.getDescription();
+                case TableModel.LOCATION:
+                    return s.getLocation();
+                case TableModel.SITE_ID:
+                    return s.getSiteId();
+                case TableModel.STATUS:
+                    return s.isStatus();
+                default:
+                    return null;
+            }
+
         }
-        
+
     }
-    
+
 }

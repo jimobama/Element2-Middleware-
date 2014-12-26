@@ -5,15 +5,19 @@
  */
 package beans;
 
+import entities.Structure;
 import java.util.List;
 import javax.ejb.FinderException;
+import javax.ejb.Local;
 import javax.ejb.Remote;
+import javax.naming.NamingException;
 
 /**
  *
  * @author Obaro I. Johnson
  */
 @Remote
+
 public interface IEntrySiteRemote {
 
     public boolean createSite(entities.Site site) throws FinderException;
@@ -29,4 +33,6 @@ public interface IEntrySiteRemote {
     public List<entities.Site> searchSites(entities.Site site) throws FinderException;
 
     public String getErrorMessage();
+
+    List<Structure> getStructures(int id) throws FinderException, NamingException;
 }

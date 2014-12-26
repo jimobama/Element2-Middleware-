@@ -6,13 +6,14 @@
 package beans;
 
 import entities.Site;
+import entities.Structure;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.Remote;
-
-
-
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.ejb.FinderException;
+import javax.naming.NamingException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,7 +24,6 @@ import javax.persistence.Query;
  * @author Obaro I. Johnson
  */
 @Stateless
-@Remote(IEntrySiteRemote.class)
 public class IEntrySite implements IEntrySiteRemote {
 
     //all private fields
@@ -31,8 +31,10 @@ public class IEntrySite implements IEntrySiteRemote {
     @PersistenceContext(unitName = helps.EJBServerConstants.Beans.PERSISTENCE_UNIT)
     private EntityManager siteManager;
     private String error;
-    
-	
+
+    @EJB
+    private IEntryStructureRemote structureBean;
+
     public IEntrySite() {
         isCreate = false;
 
@@ -41,7 +43,7 @@ public class IEntrySite implements IEntrySiteRemote {
 //Using the synchronized modifier to avoid prevent interference of client trying to modifier or create a site with same id or accessing
 //the same variable
     @Override
-   	
+
     public synchronized boolean createSite(Site site) throws FinderException {
         isCreate = false;
         try {
@@ -80,7 +82,7 @@ public class IEntrySite implements IEntrySiteRemote {
     }
 
     @Override
-   // @OnSucess
+    // @OnSucess
     public synchronized List<Site> getSites() throws FinderException {
 
         //this.siteManager.createQuery("DELETE From Site s ").executeUpdate();
@@ -110,8 +112,8 @@ public class IEntrySite implements IEntrySiteRemote {
     }
 
     @Override
-	//@OnSucess
-	//@OnException
+    //@OnSucess
+    //@OnException
     public boolean updateSite(int id, Site info) {
         boolean isOkay = false;
         try {
@@ -141,8 +143,8 @@ public class IEntrySite implements IEntrySiteRemote {
     /*
      The method find the all the sites that matches any of the site fields and return a list of the sites found
      */
-	
-   // @OnException
+
+    // @OnException
     public List<Site> searchSites(Site site) throws FinderException {
         if (site == null) {
             return null;
@@ -163,7 +165,7 @@ public class IEntrySite implements IEntrySiteRemote {
     /*
      The method check if a site  already exists it matches with the site's name 
      */
-   
+
     @Override
     public boolean isExists(Site site) throws FinderException {
 
@@ -178,8 +180,49 @@ public class IEntrySite implements IEntrySiteRemote {
         return isOkay;
 
     }
-    
-    
-    
+
+    public boolean isExists(int id) throws FinderException {
+
+        boolean isOkay = false;
+        String sql = "Select s From Site s WHERE s.id = :id ";
+        Query q = this.siteManager.createQuery(sql);
+        q.setParameter("id", (long) id);
+
+        if (q.getResultList().size() > 0) {
+            isOkay = true;
+        }
+
+        return isOkay;
+
+    }
+    /*
+     The method call another session bean inside it
+     */
+
+    @Override
+    public List<Structure> getStructures(int id) throws FinderException, NamingException {
+
+        List<Structure> structures = null;
+
+        try {
+            if (this.isExists(id)) {
+                //create a session bean and look it from the running server to be able to use its methods
+                Context ctx;
+                ctx = new InitialContext();
+                structureBean = (IEntryStructureRemote) ctx.lookup(helps.EJBServerConstants.Beans.IEntryStructure);
+                structures = (List<Structure>) structureBean.getStructures(id);
+
+                return structures;
+
+            }
+        } catch (FinderException ex) {
+            throw ex;
+        } catch (NamingException err) {
+
+            throw err;
+        }
+
+        return structures;
+    }
 
 }

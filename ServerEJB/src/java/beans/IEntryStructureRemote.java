@@ -8,6 +8,7 @@ package beans;
 import entities.Structure;
 import java.util.List;
 import javax.ejb.FinderException;
+import javax.ejb.Local;
 import javax.ejb.Remote;
 
 /**
@@ -24,5 +25,7 @@ public interface IEntryStructureRemote {
     boolean isExists(Structure struct) throws FinderException;
 
     boolean delete(Structure s) throws FinderException;
+
+    public List<Structure> getStructures(int id) throws FinderException;
 
 }
