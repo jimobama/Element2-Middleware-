@@ -7,7 +7,6 @@ package client.views;
 
 import client.controllers.ClientController;
 import client.models.ClientModel;
-import client.models.StructureModel;
 import entities.Site;
 import entities.Structure;
 import helps.View;

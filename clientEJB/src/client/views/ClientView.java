@@ -219,6 +219,7 @@ public class ClientView extends View implements ISubject {
 
     public void setSiteInformation(Site site) {
         this.pnlMainStructure.setSiteInformation(site);
+       
     }
 
     public Structure getStructure() {
