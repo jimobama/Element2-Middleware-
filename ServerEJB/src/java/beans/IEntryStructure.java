@@ -114,7 +114,7 @@ public class IEntryStructure implements IEntryStructureRemote {
     }
 
     @Override
-    public boolean deleteBySiteID(Long siteid) {
+    public void deleteBySiteID(Long siteid) {
         
        
         String sql = "DELETE FROM Structure s WHERE s.siteId=:id";
@@ -123,9 +123,9 @@ public class IEntryStructure implements IEntryStructureRemote {
         //excute the query to check the affected row;
         int affectedRow = query.executeUpdate();
         if (affectedRow > 0) {
-         return true;
+          //do nothing
         }
-      return false;
+
       
     }
 }

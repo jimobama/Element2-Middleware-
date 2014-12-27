@@ -28,6 +28,6 @@ public interface IEntryStructureRemote {
 
     public List<Structure> getStructures(int id) throws FinderException;
 
-    public boolean deleteBySiteID(Long id);
+    public void deleteBySiteID(Long id);
 
 }

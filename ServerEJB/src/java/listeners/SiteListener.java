@@ -15,7 +15,7 @@ import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.persistence.PreRemove;
+import javax.persistence.PostRemove;
 
 
 /**
@@ -44,22 +44,15 @@ public class SiteListener {
                
     }
     
-    @PreRemove
+    @PostRemove
     void cleanUp(Object o)
     {
         if(remoteSructure !=null)
         {
             //type cast the object to the site object
             Site site=(Site)o;            
-            if(this.remoteSructure.deleteBySiteID(site.getId()))
-            {
-                javax.swing.JOptionPane.showMessageDialog(null,"Deleted successfully");
-            }else
-            {
-                 javax.swing.JOptionPane.showMessageDialog(null," Not delete Deleted successfully");
-            }
-            
-            
+           this.remoteSructure.deleteBySiteID(site.getId());            
+            javax.swing.JOptionPane.showMessageDialog(null,"Is running");
             //delete the object if the site is about to be delete from the server
             
         }
