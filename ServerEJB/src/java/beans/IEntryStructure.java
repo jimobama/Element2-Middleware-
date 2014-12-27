@@ -112,4 +112,20 @@ public class IEntryStructure implements IEntryStructureRemote {
 
         return s;
     }
+
+    @Override
+    public boolean deleteBySiteID(Long siteid) {
+        
+       
+        String sql = "DELETE FROM Structure s WHERE s.siteId=:id";
+        Query query = this.structureManager.createQuery(sql);
+        query.setParameter("id", siteid);
+        //excute the query to check the affected row;
+        int affectedRow = query.executeUpdate();
+        if (affectedRow > 0) {
+         return true;
+        }
+      return false;
+      
+    }
 }
