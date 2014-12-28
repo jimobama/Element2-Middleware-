@@ -8,14 +8,16 @@ package beans;
 import entities.Structure;
 import java.util.List;
 import javax.ejb.FinderException;
-import javax.ejb.Local;
 import javax.ejb.Remote;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 /**
  *
  * @author Obaro I. Johnson
  */
 @Remote
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public interface IEntryStructureRemote {
 
     List<Structure> getStructures() throws FinderException;
